@@ -8,19 +8,17 @@ using Webshop.Models;
 
 namespace Webshop.Controllers
 {
-  public class HomeController : Controller
-  {
-    public IActionResult Index()
+    public class ShopController : Controller
     {
-      return View();
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+        }
     }
-
-
-      
-
-    public IActionResult Error()
-    {
-      return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
-    }
-  }
 }
