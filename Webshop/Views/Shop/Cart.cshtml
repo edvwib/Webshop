@@ -1,14 +1,8 @@
-﻿@model TModel
+﻿@model List<ProductViewModel>
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+<ul>
+    @foreach (var product in Model)
+    {
+        <li>@(product.Name) | @(product.Price)</li>
+    }
+</ul>

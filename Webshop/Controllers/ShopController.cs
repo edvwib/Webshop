@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace Webshop.Controllers
     public class ShopController : Controller
     {
         private readonly string _connectionString;
+        private readonly Guid _guid = Guid.NewGuid();
 
         public ShopController(IConfiguration config)
         {
             _connectionString = config.GetConnectionString("ConnectionString");
+            Console.WriteLine(_guid);
         }
 
         public IActionResult Index()
@@ -41,6 +44,26 @@ namespace Webshop.Controllers
                 return NotFound();
 
             return View(product);
+        }
+
+        public IActionResult AddToCart(string guid)
+        {
+
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Execute("SELECT * FROM carts WHERE guid=@guid", new {guid});
+            }
+            return RedirectToAction("Cart");
+        }
+
+        public IActionResult Cart(string guid)
+        {
+            List<ProductViewModel> cart;
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                cart = connection.Query<ProductViewModel>("SELECT * FROM carts WHERE guid=@guid", new {guid}).ToList();
+            }
+            return View(cart);
         }
 
 

@@ -1,14 +1,16 @@
 ﻿@model ProductViewModel
 
-<div class="product" data-productId="@Model.Id">
-    <div class="productName">
+<div class="product" data-productid="@Model.Id">
+    <h2 class="productName">
         @Model.Name
-    </div>
-    <div class="productDescription">
+    </h2>
+
+    <p class="productDescription">
         @Model.Description
-    </div>
-    <div class="productPrice">
-        $@Model.Price
-    </div>
-    <div class="productImage" style="background-image: url('/../images/@Model.Id\.jpg')"></div>
+    </p>
+
+    <img class="productImage" src="/../images/@(Model.Id).jpg" alt="product image">
+
+    <input class="productPrice" type="button" value="$@Model.Price" data-productprice="$@Model.Price"
+           onclick="location.href='@Url.Action("AddToCart", "Shop")'">
 </div>
