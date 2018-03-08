@@ -1,0 +1,14 @@
+﻿@model ProductViewModel
+
+<div class="product" data-productId="@Model.Id">
+    <div class="productName">
+        @Model.Name
+    </div>
+    <div class="productDescription">
+        @Model.Description
+    </div>
+    <div class="productPrice">
+        $@Model.Price
+    </div>
+    <div class="productImage" style="background-image: url('/../images/@Model.Id\.jpg')"></div>
+</div>

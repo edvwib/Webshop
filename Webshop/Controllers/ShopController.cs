@@ -29,6 +29,21 @@ namespace Webshop.Controllers
         }
 
 
+        public IActionResult Product(int id)
+        {
+            ProductViewModel product;
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                product = connection.QuerySingleOrDefault<ProductViewModel>("SELECT * FROM products WHERE Id=@id", new {id});
+            }
+
+            if (product == null)
+                return NotFound();
+
+            return View(product);
+        }
+
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
