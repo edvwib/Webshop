@@ -5,10 +5,9 @@
 }
 
 <div id="productsDisplay">
-
     @foreach (var product in Model)
     {
-        <div class="product" data-id="@product.Id">
+        <div class="product" data-productId="@product.Id">
             <div class="productName">
                 @product.Name
             </div>
@@ -20,5 +19,4 @@
             </div>
         </div>
     }
-
 </div>
