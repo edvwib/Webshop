@@ -52,27 +52,9 @@ namespace Webshop.Controllers
         {
             _guid = GetGuidCookie();
 
-            //Check if anything in cart
-            CartViewModel cart;
             using (var connection = new SqliteConnection(_connectionString))
             {
-                cart = connection.QuerySingleOrDefault<CartViewModel>("SELECT * FROM carts WHERE guid=@guid", new {guid = _guid});
-            }
-
-            if (cart == null) //Add new cart to db
-            {
-                using (var connection = new SqliteConnection(_connectionString))
-                {
-                    connection.Execute("INSERT INTO carts (guid, productIds) VALUES (@guid, @productIds)", new {guid = _guid, productIds = id});
-                }
-            }
-            else //Update cart
-            {
-                cart.ProductIds += "," + id;
-                using (var connection = new SqliteConnection(_connectionString))
-                {
-                    connection.Execute("UPDATE carts SET productIds=@productIds WHERE guid=@guid", new {productIds = cart.ProductIds, guid = _guid});
-                }
+                connection.Execute("INSERT INTO carts (guid, productId) VALUES (@guid, @productId)", new {guid = _guid, productId = id});
             }
 
             return RedirectToAction("Cart");
@@ -82,41 +64,30 @@ namespace Webshop.Controllers
         {
             _guid = GetGuidCookie();
             List<ProductViewModel> productsInCart = new List<ProductViewModel>();
-            CartViewModel cart;
-            List<int> productIds = new List<int>();
+            List<CartViewModel> cart = new List<CartViewModel>();
 
             using (var connection = new SqliteConnection(_connectionString))
             {
-                cart = connection.QuerySingleOrDefault<CartViewModel>("SELECT * FROM carts WHERE guid=@guid", new {guid = _guid});
+                cart = connection.Query<CartViewModel>("SELECT * FROM carts WHERE guid=@guid", new {guid = _guid}).ToList();
             }
 
-            if (cart != null)
+            if (!cart.Any())
+                return View();
+
+            foreach (var product in cart)
             {
-                foreach (var productId in cart.ProductIds.Split(','))
+                using (var connection = new SqliteConnection(_connectionString))
                 {
-                    int id;
-                    if (Int32.TryParse(productId, out id))
-                    {
-                        productIds.Add(id);
-                    }
-                    else
-                    {
-                        throw new IndexOutOfRangeException();
-                    }
+                    productsInCart.Add(connection.QuerySingleOrDefault<ProductViewModel>("SELECT * FROM products WHERE Id=@id", new {id = product.ProductId}));
                 }
-
-                foreach (var productId in productIds)
-                {
-                    using (var connection = new SqliteConnection(_connectionString))
-                    {
-                        productsInCart.Add(connection.QuerySingleOrDefault<ProductViewModel>("SELECT * FROM products WHERE Id=@id", new {id = productId}));
-                    }
-                }
-
-                return View(productsInCart);
             }
 
-            return View();
+            return View(productsInCart);
+        }
+
+        public IActionResult RemoveItemFromCart()
+        {
+            return RedirectToAction("Cart");
         }
 
         public IActionResult EmptyCart()
