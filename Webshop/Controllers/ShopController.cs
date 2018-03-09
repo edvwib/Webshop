@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -13,12 +14,11 @@ namespace Webshop.Controllers
     public class ShopController : Controller
     {
         private readonly string _connectionString;
-        private readonly Guid _guid = Guid.NewGuid();
+        private string _guid;
 
         public ShopController(IConfiguration config)
         {
             _connectionString = config.GetConnectionString("ConnectionString");
-            Console.WriteLine(_guid);
         }
 
         public IActionResult Index()
@@ -46,24 +46,50 @@ namespace Webshop.Controllers
             return View(product);
         }
 
-        public IActionResult AddToCart(string guid)
+        public IActionResult AddToCart(int id)
         {
 
+            var guidCookie = Request.Cookies["guid"];
+            if (guidCookie == null)
+            {
+                _guid = Guid.NewGuid().ToString();
+                Response.Cookies.Append("guid", _guid);
+            }
+            else
+            {
+                _guid = guidCookie;
+            }
+
+            //Check if anything in cart
+            CartViewModel cart;
             using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Execute("SELECT * FROM carts WHERE guid=@guid", new {guid});
+                cart = connection.QuerySingleOrDefault<CartViewModel>("SELECT * FROM carts WHERE guid=@guid", new {guid = _guid});
             }
+
+            if (cart == null) //Add new cart to db
+            {
+                using (var connection = new SqliteConnection(_connectionString))
+                {
+                    connection.Execute("INSERT INTO carts (guid, productIds) VALUES (@guid, @productIds)", new {guid = _guid, productIds = id});
+                }
+            }
+            else //Update cart
+            {
+                cart.ProductIds += "," + id;
+                using (var connection = new SqliteConnection(_connectionString))
+                {
+                    connection.Execute("UPDATE carts SET productIds=@productIds WHERE guid=@guid", new {productIds = cart.ProductIds, guid = _guid});
+                }
+            }
+
             return RedirectToAction("Cart");
         }
 
-        public IActionResult Cart(string guid)
+        public IActionResult Cart()
         {
-            List<ProductViewModel> cart;
-            using (var connection = new SqliteConnection(_connectionString))
-            {
-                cart = connection.Query<ProductViewModel>("SELECT * FROM carts WHERE guid=@guid", new {guid}).ToList();
-            }
-            return View(cart);
+
+            return View();
         }
 
 

@@ -1,8 +1,12 @@
 ﻿@model List<ProductViewModel>
 
 <ul>
-    @foreach (var product in Model)
+    @if (Model != null)
     {
-        <li>@(product.Name) | @(product.Price)</li>
+        foreach (var product in Model)
+         {
+             <li>@(product.Name) | @(product.Price)</li>
+         }
     }
+
 </ul>

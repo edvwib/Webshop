@@ -4,6 +4,7 @@
     ViewData["Title"] = "Webshop Home";
 }
 
+
 <div id="productsDisplay">
     @foreach (var product in Model)
     {
@@ -11,7 +12,7 @@
             <a class="productName" href="/Shop/Product/@product.Id">
                 @product.Name
             </a>
-            
+
             <img class="productImage" src="/../images/@(product.Id).jpg" alt="product image">
 
             <input class="productPrice" type="button" value="$@product.Price" data-productprice="$@product.Price">
