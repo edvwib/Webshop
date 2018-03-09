@@ -33,7 +33,6 @@ namespace Webshop.Controllers
             return View(products);
         }
 
-
         public IActionResult Product(int id)
         {
             ProductViewModel product;
@@ -87,6 +86,8 @@ namespace Webshop.Controllers
 
         public IActionResult RemoveItemFromCart()
         {
+
+
             return RedirectToAction("Cart");
         }
 
@@ -100,16 +101,16 @@ namespace Webshop.Controllers
             return RedirectToAction("Cart");
         }
 
-
-
         public string GetGuidCookie()
         {
             var guidCookie = Request.Cookies["guid"];
 
-            if (guidCookie != null) return guidCookie;
+            if (guidCookie != null)
+                return guidCookie;
 
             guidCookie = Guid.NewGuid().ToString();
             Response.Cookies.Append("guid", guidCookie);
+
             return guidCookie;
         }
 

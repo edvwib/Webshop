@@ -34,7 +34,7 @@
         <li class="cartProductHeader">
             <span class="cartProductTotalSpacer"></span>
             <span class="cartProductTotalPrice">Total: $@totalPrice</span>
-            <input class="cartProductRemoveAll" type="button" value="Empty cart" onclick="location.href='@Url.Action("EmptyCart", "Shop")'">
+            <input class="cartProductRemoveAll" type="button" value="Empty cart" onclick="if(confirm('Do you really want to clear your cart?')) location.href='@Url.Action("EmptyCart", "Shop")'">
         </li>
     </ul>
 </div>
