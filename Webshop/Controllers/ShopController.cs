@@ -117,7 +117,16 @@ namespace Webshop.Controllers
             }
 
             return View();
+        }
 
+        public IActionResult EmptyCart()
+        {
+            if (GetGuidCookie() != null)
+            {
+                Response.Cookies.Delete("guid");
+            }
+
+            return RedirectToAction("Cart");
         }
 
 

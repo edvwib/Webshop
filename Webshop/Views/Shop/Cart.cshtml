@@ -1,16 +1,40 @@
 ﻿@model List<ProductViewModel>
 
-<ul>
-    @if (Model != null)
-    {
-        foreach (var product in Model)
-         {
-             <li>@(product.Name) | $@(product.Price)</li>
-         }
-    }
-    else
-    {
-        <h3>Your cart is empty</h3>
-    }
+@{
+    decimal totalPrice = 0;
+}
 
-</ul>
+
+<div id="cartDisplay">
+    <ul class="cartList">
+        <li class="cartProductHeader">
+            <span class="cartProductNameHeader">Product</span>
+            <span class="cartProductPriceHeader">Price</span>
+            <span class="cartProductRemoveHeader">Action</span>
+        </li>
+
+        @if (Model != null)
+        {
+            foreach (var product in Model)
+            {
+                <li class="cartProduct">
+                    <span class="cartProductName">@product.Name</span>
+                    <span class="cartProductPrice">$@product.Price</span>
+                    <a class="cartProductRemove" href="#">Remove</a>
+                </li>
+
+                totalPrice += product.Price;
+            }
+        }
+        else
+        {
+            <li class="cartEmptyNotice">Your cart is empty</li>
+        }
+
+        <li class="cartProductHeader">
+            <span class="cartProductTotalSpacer"></span>
+            <span class="cartProductTotalPrice">Total: $@totalPrice</span>
+            <input class="cartProductRemoveAll" type="button" value="Empty cart" onclick="location.href='@Url.Action("EmptyCart", "Shop")'">
+        </li>
+    </ul>
+</div>

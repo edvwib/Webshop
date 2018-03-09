@@ -44,3 +44,46 @@ nav > ul > li > a{
 .productPrice{
   width: 100%;
 }
+
+
+
+/*CART*/
+.cartDisplay{
+
+}
+.cartList{
+  list-style-type: none;
+  display: flex;
+  flex-flow: column nowrap;
+}
+.cartProduct, .cartProductHeader{
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  height: 40px;
+  align-items: center
+}
+
+
+.cartProductName, .cartProductNameHeader, .cartProductTotalSpacer{
+  width: 400px;
+}
+.cartProductPrice, .cartProductPriceHeader, .cartProductTotalPrice{
+  width: 120px;
+  text-align: start;
+}
+.cartProductRemove, .cartProductRemoveHeader, .cartProductRemoveAll{
+  width: 100px;
+  text-align: end;
+}
+.cartProductRemoveAll{
+  color: red;
+}
+
+.cartProductNameHeader,
+.cartProductPriceHeader,
+.cartProductRemoveHeader,
+.cartProductTotalPrice,
+.cartProductRemoveAll{
+  font-weight: bold;
+}
