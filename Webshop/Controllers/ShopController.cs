@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Dapper;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.Sqlite;
 using Webshop.Models;
@@ -48,17 +50,7 @@ namespace Webshop.Controllers
 
         public IActionResult AddToCart(int id)
         {
-
-            var guidCookie = Request.Cookies["guid"];
-            if (guidCookie == null)
-            {
-                _guid = Guid.NewGuid().ToString();
-                Response.Cookies.Append("guid", _guid);
-            }
-            else
-            {
-                _guid = guidCookie;
-            }
+            _guid = GetGuidCookie();
 
             //Check if anything in cart
             CartViewModel cart;
@@ -88,10 +80,53 @@ namespace Webshop.Controllers
 
         public IActionResult Cart()
         {
+            _guid = GetGuidCookie();
+            List<ProductViewModel> productsInCart = new List<ProductViewModel>();
+            CartViewModel cart;
+            List<int> productIds = new List<int>();
 
-            return View();
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                cart = connection.QuerySingleOrDefault<CartViewModel>("SELECT * FROM carts WHERE guid=@guid", new {guid = _guid});
+            }
+
+
+            foreach (var productId in cart.ProductIds.Split(','))
+            {
+                int id;
+                if (Int32.TryParse(productId, out id))
+                {
+                    productIds.Add(id);
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException();
+                }
+            }
+
+            foreach (var productId in productIds)
+            {
+                using (var connection = new SqliteConnection(_connectionString))
+                {
+                    productsInCart.Add(connection.QuerySingleOrDefault<ProductViewModel>("SELECT * FROM products WHERE Id=@id", new {id = productId}));
+                }
+            }
+
+            return View(productsInCart);
         }
 
+
+
+        public string GetGuidCookie()
+        {
+            var guidCookie = Request.Cookies["guid"];
+
+            if (guidCookie != null) return guidCookie;
+
+            guidCookie = Guid.NewGuid().ToString();
+            Response.Cookies.Append("guid", guidCookie);
+            return guidCookie;
+        }
 
         public IActionResult Error()
         {
