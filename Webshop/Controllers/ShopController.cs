@@ -90,29 +90,34 @@ namespace Webshop.Controllers
                 cart = connection.QuerySingleOrDefault<CartViewModel>("SELECT * FROM carts WHERE guid=@guid", new {guid = _guid});
             }
 
-
-            foreach (var productId in cart.ProductIds.Split(','))
+            if (cart != null)
             {
-                int id;
-                if (Int32.TryParse(productId, out id))
+                foreach (var productId in cart.ProductIds.Split(','))
                 {
-                    productIds.Add(id);
+                    int id;
+                    if (Int32.TryParse(productId, out id))
+                    {
+                        productIds.Add(id);
+                    }
+                    else
+                    {
+                        throw new IndexOutOfRangeException();
+                    }
                 }
-                else
+
+                foreach (var productId in productIds)
                 {
-                    throw new IndexOutOfRangeException();
+                    using (var connection = new SqliteConnection(_connectionString))
+                    {
+                        productsInCart.Add(connection.QuerySingleOrDefault<ProductViewModel>("SELECT * FROM products WHERE Id=@id", new {id = productId}));
+                    }
                 }
+
+                return View(productsInCart);
             }
 
-            foreach (var productId in productIds)
-            {
-                using (var connection = new SqliteConnection(_connectionString))
-                {
-                    productsInCart.Add(connection.QuerySingleOrDefault<ProductViewModel>("SELECT * FROM products WHERE Id=@id", new {id = productId}));
-                }
-            }
+            return View();
 
-            return View(productsInCart);
         }
 
 
