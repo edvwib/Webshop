@@ -20,9 +20,14 @@
             {
                 <li class="cartProduct">
                     <span class="cartProductName">@product.Name</span>
-                    <span class="cartProductPrice">$@product.Price x <input class="productCount" type="number" value="@product.Count" min="1" max="10"></span>
-                    <span class="cartProductControls">
-                        @*<input class="cartProductUpdate" type="button" value="Update" onclick="location.href='@Url.Action("UpdateCartItem", "Shop", new {product.Id})'">*@
+                    <span class="cartProductPrice">$@product.Price x <input data-counterproductid="@product.Id" class="productCount" type="number" value="@product.Count" min="1" max="10"></span>
+                    <span class="cartProductControls" data-controlsproductid="@product.Id">
+                        @using (Html.BeginForm("UpdateCartItem", "Shop"))
+                        {
+                            @Html.Hidden("productId", product.Id)
+                            @Html.Hidden("count", product.Count)
+                            <input class="cartProductUpdate" type="submit" value="Update">
+                        }
                         @using (Html.BeginForm("RemoveItemFromCart", "Shop"))
                         {
                             @Html.Hidden("productId", product.Id)

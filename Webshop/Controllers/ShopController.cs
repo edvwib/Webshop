@@ -140,8 +140,13 @@ namespace Webshop.Controllers
             return RedirectToAction("Cart");
         }
 
-        public IActionResult UpdateCartItem(int id)
+        public IActionResult UpdateCartItem(int productId, int count)
         {
+            _guid = GetGuidCookie();
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Execute("UPDATE carts SET count=@count WHERE guid=@_guid AND productId=@productId", new {count, _guid, productId});
+            }
 
 
             return RedirectToAction("Cart");
