@@ -1,4 +1,5 @@
-﻿@model List<UserCartViewModel>
+﻿@using Microsoft.AspNetCore.Rewrite.Internal
+@model List<UserCartViewModel>
 
 @{
     decimal totalPrice = 0;
@@ -10,7 +11,7 @@
         <li class="cartProductHeader">
             <span class="cartProductNameHeader">Product</span>
             <span class="cartProductPriceHeader">Price</span>
-            <span class="cartProductRemoveHeader">Action</span>
+            <span class="cartProductControlsHeader">Action</span>
         </li>
 
         @if (Model != null)
@@ -19,8 +20,15 @@
             {
                 <li class="cartProduct">
                     <span class="cartProductName">@product.Name</span>
-                    <span class="cartProductPrice">$@product.Price x @product.Count</span>
-                    <input class="cartProductRemove" type="button" value="Remove" onclick="location.href='@Url.Action("RemoveItemFromCart", "Shop", new {product.Id})'">
+                    <span class="cartProductPrice">$@product.Price x <input class="productCount" type="number" value="@product.Count" min="1" max="10"></span>
+                    <span class="cartProductControls">
+                        @*<input class="cartProductUpdate" type="button" value="Update" onclick="location.href='@Url.Action("UpdateCartItem", "Shop", new {product.Id})'">*@
+                        @using (Html.BeginForm("RemoveItemFromCart", "Shop"))
+                        {
+                            @Html.Hidden("productId", product.Id)
+                            <input class="cartProductRemove" type="submit" value="Remove">
+                        }
+                    </span>
                 </li>
 
                 totalPrice += product.Price * product.Count;
@@ -34,7 +42,15 @@
         <li class="cartProductHeader">
             <span class="cartProductTotalSpacer"></span>
             <span class="cartProductTotalPrice">Total: $@totalPrice</span>
-            <input class="cartProductRemoveAll" type="button" value="Empty cart" onclick="if(confirm('Do you really want to clear your cart?')) location.href='@Url.Action("EmptyCart", "Shop")'">
+            @using (Html.BeginForm("EmptyCart", "Shop"))
+            {
+                <input class="cartProductRemoveAll" type="submit" value="Empty cart">
+            }
         </li>
     </ul>
+
+    @using (Html.BeginForm("Checkout", "Shop"))
+    {
+        <input class="cartCheckout" type="submit" value="Checkout">
+    }
 </div>

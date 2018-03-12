@@ -15,8 +15,11 @@
 
             <img class="productImage" src="/../images/@(product.Id).jpg" alt="product image">
 
-            <input class="productPrice" type="button" value="$@product.Price" data-productprice="$@product.Price"
-                   onclick="location.href='@Url.Action("AddToCart", "Shop", new {@product.Id})'">
+            @using (Html.BeginForm("AddToCart", "Shop"))
+            {
+                @Html.Hidden("productId", product.Id)
+                <input class="productPrice" type="submit" value="$@product.Price" data-productprice="$@product.Price">
+            }
         </div>
     }
 </div>

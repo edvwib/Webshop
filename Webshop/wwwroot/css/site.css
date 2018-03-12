@@ -72,8 +72,8 @@ nav > ul > li > a{
   width: 120px;
   text-align: start;
 }
-.cartProductRemove, .cartProductRemoveHeader, .cartProductRemoveAll{
-  width: 100px;
+.cartProductControls, .cartProductControlsHeader, .cartProductRemoveAll{
+  width: 138px;
   text-align: end;
 }
 .cartProductRemoveAll{
@@ -82,8 +82,12 @@ nav > ul > li > a{
 
 .cartProductNameHeader,
 .cartProductPriceHeader,
-.cartProductRemoveHeader,
+.cartProductControlsHeader,
 .cartProductTotalPrice,
 .cartProductRemoveAll{
   font-weight: bold;
+}
+
+.productCount{
+  width: 30px;
 }

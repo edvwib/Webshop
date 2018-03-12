@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.Sqlite;
@@ -47,7 +48,7 @@ namespace Webshop.Controllers
             return View(product);
         }
 
-        public IActionResult AddToCart(int id)
+        public IActionResult AddToCart(int productId)
         {
             _guid = GetGuidCookie();
 
@@ -55,15 +56,15 @@ namespace Webshop.Controllers
             {
 
                 //Check if item is already in cart, if it is then increment
-                var cart = connection.QuerySingleOrDefault("SELECT * FROM carts WHERE guid=@_guid AND productId=@id", new {_guid, id});
+                var cart = connection.QuerySingleOrDefault("SELECT * FROM carts WHERE guid=@_guid AND productId=@id", new {_guid, id = productId});
 
                 if (cart != null)
                 {
-                    connection.Execute("UPDATE carts SET count=count+1 WHERE guid=@_guid AND productId=@id", new {_guid, id});
+                    connection.Execute("UPDATE carts SET count=count+1 WHERE guid=@_guid AND productId=@id", new {_guid, id = productId});
                 }
                 else
                 {
-                    connection.Execute("INSERT INTO carts (guid, productId, count) VALUES (@guid, @productId, 1)", new {guid = _guid, productId = id});
+                    connection.Execute("INSERT INTO carts (guid, productId, count) VALUES (@guid, @productId, 1)", new {guid = _guid, productId});
                 }
             }
 
@@ -111,13 +112,13 @@ namespace Webshop.Controllers
             return View(userCart);
         }
 
-        public IActionResult RemoveItemFromCart(int id)
+        public IActionResult RemoveItemFromCart(int productId)
         {
             _guid = GetGuidCookie();
 
             using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Execute("DELETE FROM carts WHERE productId=@id AND guid=@_guid", new {id, _guid});
+                connection.Execute("DELETE FROM carts WHERE productId=@id AND guid=@_guid", new {id = productId, _guid});
             }
 
             return RedirectToAction("Cart");
@@ -137,6 +138,19 @@ namespace Webshop.Controllers
             }
 
             return RedirectToAction("Cart");
+        }
+
+        public IActionResult UpdateCartItem(int id)
+        {
+
+
+            return RedirectToAction("Cart");
+        }
+
+
+        public IActionResult Checkout()
+        {
+            return View();
         }
 
         public string GetGuidCookie()
