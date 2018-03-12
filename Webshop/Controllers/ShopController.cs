@@ -94,8 +94,7 @@ namespace Webshop.Controllers
 
                     if (p != null)
                     {
-                        int count;
-                        count = c == null ? 1 : c.Count; //If c=null default to 1, else get the value
+                        int count = c == null ? 1 : c.Count; //If c=null default to 1, else get the value
 
                         userCart.Add(new UserCartViewModel()
                         {
@@ -112,13 +111,13 @@ namespace Webshop.Controllers
             return View(userCart);
         }
 
-        public IActionResult RemoveItemFromCart(int productId)
+        public IActionResult RemoveItemFromCart(int id)
         {
             _guid = GetGuidCookie();
 
             using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Execute("DELETE FROM carts WHERE Id=@id AND guid=@guid", new {id = productId, guid = _guid});
+                connection.Execute("DELETE FROM carts WHERE productId=@id AND guid=@_guid", new {id, _guid});
             }
 
             return RedirectToAction("Cart");
@@ -126,9 +125,15 @@ namespace Webshop.Controllers
 
         public IActionResult EmptyCart()
         {
+            _guid = GetGuidCookie();
+
             if (GetGuidCookie() != null)
             {
                 Response.Cookies.Delete("guid");
+                using (var connection = new SqliteConnection(_connectionString))
+                {
+                    connection.Execute("DELETE FROM carts WHERE guid=@_guid", new {_guid});
+                }
             }
 
             return RedirectToAction("Cart");
