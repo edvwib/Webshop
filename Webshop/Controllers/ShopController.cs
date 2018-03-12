@@ -53,7 +53,18 @@ namespace Webshop.Controllers
 
             using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Execute("INSERT INTO carts (guid, productId) VALUES (@guid, @productId)", new {guid = _guid, productId = id});
+
+                //Check if item is already in cart, if it is then increment
+                var cart = connection.QuerySingleOrDefault("SELECT * FROM carts WHERE guid=@_guid AND productId=@id", new {_guid, id});
+
+                if (cart != null)
+                {
+                    connection.Execute("UPDATE carts SET count=count+1 WHERE guid=@_guid AND productId=@id", new {_guid, id});
+                }
+                else
+                {
+                    connection.Execute("INSERT INTO carts (guid, productId, count) VALUES (@guid, @productId, 1)", new {guid = _guid, productId = id});
+                }
             }
 
             return RedirectToAction("Cart");
@@ -62,7 +73,7 @@ namespace Webshop.Controllers
         public IActionResult Cart()
         {
             _guid = GetGuidCookie();
-            List<ProductViewModel> productsInCart = new List<ProductViewModel>();
+            List<UserCartViewModel> userCart = new List<UserCartViewModel>();
             List<CartViewModel> cart = new List<CartViewModel>();
 
             using (var connection = new SqliteConnection(_connectionString))
@@ -77,16 +88,38 @@ namespace Webshop.Controllers
             {
                 using (var connection = new SqliteConnection(_connectionString))
                 {
-                    productsInCart.Add(connection.QuerySingleOrDefault<ProductViewModel>("SELECT * FROM products WHERE Id=@id", new {id = product.ProductId}));
+                    var p = connection.QuerySingleOrDefault<ProductViewModel>("SELECT * FROM products WHERE Id=@id", new {id = product.ProductId});
+
+                    var c = connection.QuerySingleOrDefault<UserCartViewModel>("SELECT * FROM carts WHERE guid=@_guid AND productId=@id", new {_guid, id = product.ProductId});
+
+                    if (p != null)
+                    {
+                        int count;
+                        count = c == null ? 1 : c.Count; //If c=null default to 1, else get the value
+
+                        userCart.Add(new UserCartViewModel()
+                        {
+                            Id = p.Id,
+                            Name = p.Name,
+                            Description = p.Description,
+                            Price = p.Price,
+                            Count = count
+                        });
+                    }
                 }
             }
 
-            return View(productsInCart);
+            return View(userCart);
         }
 
-        public IActionResult RemoveItemFromCart()
+        public IActionResult RemoveItemFromCart(int productId)
         {
+            _guid = GetGuidCookie();
 
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Execute("DELETE FROM carts WHERE Id=@id AND guid=@guid", new {id = productId, guid = _guid});
+            }
 
             return RedirectToAction("Cart");
         }

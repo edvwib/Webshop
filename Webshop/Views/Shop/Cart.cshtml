@@ -1,4 +1,4 @@
-﻿@model List<ProductViewModel>
+﻿@model List<UserCartViewModel>
 
 @{
     decimal totalPrice = 0;
@@ -19,11 +19,11 @@
             {
                 <li class="cartProduct">
                     <span class="cartProductName">@product.Name</span>
-                    <span class="cartProductPrice">$@product.Price</span>
-                    <a class="cartProductRemove" href="#">Remove</a>
+                    <span class="cartProductPrice">$@product.Price x @product.Count</span>
+                    <input class="cartProductRemove" type="button" value="Remove" onclick="location.href='@Url.Action("RemoveItemFromCart", "Shop", new {product.Id})'">
                 </li>
 
-                totalPrice += product.Price;
+                totalPrice += product.Price * product.Count;
             }
         }
         else
