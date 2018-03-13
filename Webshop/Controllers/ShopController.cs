@@ -93,19 +93,19 @@ namespace Webshop.Controllers
 
                     var c = connection.QuerySingleOrDefault<UserCartViewModel>("SELECT * FROM carts WHERE guid=@_guid AND productId=@id", new {_guid, id = product.ProductId});
 
-                    if (p != null)
-                    {
-                        int count = c == null ? 1 : c.Count; //If c=null default to 1, else get the value
+                    if (p == null)
+                        continue;
 
-                        userCart.Add(new UserCartViewModel()
-                        {
-                            Id = p.Id,
-                            Name = p.Name,
-                            Description = p.Description,
-                            Price = p.Price,
-                            Count = count
-                        });
-                    }
+                    int count = c == null ? 1 : c.Count; //If c=null default to 1, else get the value
+
+                    userCart.Add(new UserCartViewModel()
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        Count = count
+                    });
                 }
             }
 
@@ -128,13 +128,13 @@ namespace Webshop.Controllers
         {
             _guid = GetGuidCookie();
 
-            if (GetGuidCookie() != null)
+            if (_guid == null)
+                return RedirectToAction("Cart");
+
+            Response.Cookies.Delete("guid");
+            using (var connection = new SqliteConnection(_connectionString))
             {
-                Response.Cookies.Delete("guid");
-                using (var connection = new SqliteConnection(_connectionString))
-                {
-                    connection.Execute("DELETE FROM carts WHERE guid=@_guid", new {_guid});
-                }
+                connection.Execute("DELETE FROM carts WHERE guid=@_guid", new {_guid});
             }
 
             return RedirectToAction("Cart");
@@ -148,12 +148,17 @@ namespace Webshop.Controllers
                 connection.Execute("UPDATE carts SET count=@count WHERE guid=@_guid AND productId=@productId", new {count, _guid, productId});
             }
 
-
             return RedirectToAction("Cart");
         }
 
-
+        [HttpGet]
         public IActionResult Checkout()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Checkout(CheckoutViewModel address)
         {
             return View();
         }

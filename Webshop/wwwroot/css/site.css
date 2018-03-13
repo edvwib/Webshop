@@ -1,6 +1,6 @@
 ﻿/*NAV*/
 nav{
-  margin: 0px 25px;
+  margin: 0 25px;
 }
 nav > ul{
   padding: 0;
@@ -18,7 +18,7 @@ nav > ul > li > a{
 
 /*MAIN*/
 .container{
-  margin: 0px 25px;
+  /*margin: 0 25px;*/
 }
 
 #productsDisplay{
@@ -48,46 +48,12 @@ nav > ul > li > a{
 
 
 /*CART*/
-.cartDisplay{
 
-}
-.cartList{
-  list-style-type: none;
+
+/*CHECKOUT*/
+#checkOut > form{
   display: flex;
   flex-flow: column nowrap;
-}
-.cartProduct, .cartProductHeader{
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-around;
-  height: 40px;
-  align-items: center
-}
-
-
-.cartProductName, .cartProductNameHeader, .cartProductTotalSpacer{
-  width: 400px;
-}
-.cartProductPrice, .cartProductPriceHeader, .cartProductTotalPrice{
-  width: 120px;
-  text-align: start;
-}
-.cartProductControls, .cartProductControlsHeader, .cartProductRemoveAll{
-  width: 138px;
-  text-align: end;
-}
-.cartProductRemoveAll{
-  color: red;
-}
-
-.cartProductNameHeader,
-.cartProductPriceHeader,
-.cartProductControlsHeader,
-.cartProductTotalPrice,
-.cartProductRemoveAll{
-  font-weight: bold;
-}
-
-.productCount{
-  width: 30px;
+  max-width: 400px;
+  margin: auto;
 }

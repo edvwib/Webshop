@@ -1,14 +1,32 @@
-﻿@model TModel
+﻿@model CheckoutViewModel
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title>title</title>
+    <title>Checkout</title>
 </head>
 <body>
-<div>
-      
+<div id="checkOut">
+    @using (Html.BeginForm("Checkout", "Shop"))
+    {
+        @Html.LabelFor(m => m.FirstName)
+        @Html.TextBoxFor(m => m.FirstName)
+        @Html.LabelFor(m => m.LastName)
+        @Html.TextBoxFor(m => m.LastName)
+        @Html.LabelFor(m => m.Street)
+        @Html.TextBoxFor(m => m.Street)
+        @Html.LabelFor(m => m.StreetNumber)
+        @Html.TextBoxFor(m => m.StreetNumber)
+        @Html.LabelFor(m => m.Zip)
+        @Html.TextBoxFor(m => m.Zip)
+        @Html.LabelFor(m => m.City)
+        @Html.TextBoxFor(m => m.City)
+        @Html.LabelFor(m => m.Country)
+        @Html.TextBoxFor(m => m.Country)
+
+        <input type="submit" value="Confirm Order"/>
+    }
 </div>
 </body>
 </html>

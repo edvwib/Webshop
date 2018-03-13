@@ -320,3 +320,4 @@ ASALocalRun/
 *.binlog
 
 Webshop/.vscode
+.vscode

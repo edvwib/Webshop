@@ -53,9 +53,10 @@
             }
         </li>
     </ul>
-
-    @using (Html.BeginForm("Checkout", "Shop"))
-    {
-        <input class="cartCheckout" type="submit" value="Checkout">
-    }
+    <a href="/shop/checkout/">Checkout</a>
+@*    @using (Html.BeginForm("Checkout", "Shop"))*@
+@*    {*@
+@*        @Html.Hidden("Cart", Model)*@
+@*        <input class="cartCheckout" type="submit" value="Checkout">*@
+@*    }*@
 </div>
