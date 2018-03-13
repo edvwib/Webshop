@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -74,40 +74,8 @@ namespace Webshop.Controllers
         public IActionResult Cart()
         {
             _guid = GetGuidCookie();
-            List<UserCartViewModel> userCart = new List<UserCartViewModel>();
-            List<CartViewModel> cart = new List<CartViewModel>();
+            List<UserCartViewModel> userCart = getCart(_guid);
 
-            using (var connection = new SqliteConnection(_connectionString))
-            {
-                cart = connection.Query<CartViewModel>("SELECT * FROM carts WHERE guid=@guid", new {guid = _guid}).ToList();
-            }
-
-            if (!cart.Any())
-                return View();
-
-            foreach (var product in cart)
-            {
-                using (var connection = new SqliteConnection(_connectionString))
-                {
-                    var p = connection.QuerySingleOrDefault<ProductViewModel>("SELECT * FROM products WHERE Id=@id", new {id = product.ProductId});
-
-                    var c = connection.QuerySingleOrDefault<UserCartViewModel>("SELECT * FROM carts WHERE guid=@_guid AND productId=@id", new {_guid, id = product.ProductId});
-
-                    if (p == null)
-                        continue;
-
-                    int count = c == null ? 1 : c.Count; //If c=null default to 1, else get the value
-
-                    userCart.Add(new UserCartViewModel()
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Description = p.Description,
-                        Price = p.Price,
-                        Count = count
-                    });
-                }
-            }
 
             return View(userCart);
         }
@@ -160,6 +128,7 @@ namespace Webshop.Controllers
         [HttpPost]
         public IActionResult Checkout(CheckoutViewModel address)
         {
+            //return RedirectToAction("ConfirmOrder", address);
             return View();
         }
 
@@ -174,6 +143,46 @@ namespace Webshop.Controllers
             Response.Cookies.Append("guid", guidCookie);
 
             return guidCookie;
+        }
+
+        public List<UserCartViewModel> getCart(string _guid)
+        {
+            List<UserCartViewModel> userCart = new List<UserCartViewModel>();
+            List<CartViewModel> cart = new List<CartViewModel>();
+
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                cart = connection.Query<CartViewModel>("SELECT * FROM carts WHERE guid=@guid", new {guid = _guid}).ToList();
+            }
+
+            if (!cart.Any())
+                return null;
+
+            foreach (var product in cart)
+            {
+                using (var connection = new SqliteConnection(_connectionString))
+                {
+                    var p = connection.QuerySingleOrDefault<ProductViewModel>("SELECT * FROM products WHERE Id=@id", new {id = product.ProductId});
+
+                    var c = connection.QuerySingleOrDefault<UserCartViewModel>("SELECT * FROM carts WHERE guid=@_guid AND productId=@id", new {_guid, id = product.ProductId});
+
+                    if (p == null)
+                        continue;
+
+                    int count = c == null ? 1 : c.Count; //If c=null default to 1, else get the value
+
+                    userCart.Add(new UserCartViewModel()
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        Count = count
+                    });
+                }
+            }
+
+            return userCart;
         }
 
         public IActionResult Error()

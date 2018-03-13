@@ -35,19 +35,37 @@ nav > ul > li > a{
   height: 300px;
 }
 
-.productName{
-  text-decoration: none;
-}
 .productImage{
   height: 150px;
-}
-.productPrice{
-  width: 100%;
 }
 
 
 
 /*CART*/
+#cart{
+  display: flex;
+  flex-flow: column wrap;
+  margin: 0 15px;
+}
+.cartDivider{width: 100%}
+
+.productHeader > div{
+  font-weight: bold;
+}
+
+.cartProduct{
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+
+  height: 30px;
+  margin: 0 5px;
+}
+
+.productActions{
+  display: flex;
+
+}
 
 
 /*CHECKOUT*/

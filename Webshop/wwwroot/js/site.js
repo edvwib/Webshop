@@ -1,4 +1,4 @@
-﻿document.querySelectorAll('.productPrice').forEach(priceBtn => {
+﻿document.querySelectorAll('#productsDisplay .productPrice').forEach(priceBtn => {
   priceBtn.addEventListener('mouseover', (e) => {
     e.target.value = 'Add to cart';
   });

@@ -1,62 +1,69 @@
-﻿@using Microsoft.AspNetCore.Rewrite.Internal
+@using Microsoft.AspNetCore.Rewrite.Internal
 @model List<UserCartViewModel>
 
 @{
     decimal totalPrice = 0;
 }
 
-
-<div id="cartDisplay">
-    <ul class="cartList">
-        <li class="cartProductHeader">
-            <span class="cartProductNameHeader">Product</span>
-            <span class="cartProductPriceHeader">Price</span>
-            <span class="cartProductControlsHeader">Action</span>
-        </li>
-
-        @if (Model != null)
+<div id="cart">
+    <div class="cartProduct productHeader">
+        <div class="productName">Product</div>
+        <div class="productPrice">Price</div>
+        <div class="productActions">Actions</div>
+    </div>
+    <hr class="cartDivider">
+    @if (Model != null)
+    {
+        foreach (var product in Model)
         {
-            foreach (var product in Model)
-            {
-                <li class="cartProduct">
-                    <span class="cartProductName">@product.Name</span>
-                    <span class="cartProductPrice">$@product.Price x <input data-counterproductid="@product.Id" class="productCount" type="number" value="@product.Count" min="1" max="10"></span>
-                    <span class="cartProductControls" data-controlsproductid="@product.Id">
-                        @using (Html.BeginForm("UpdateCartItem", "Shop"))
-                        {
-                            @Html.Hidden("productId", product.Id)
-                            @Html.Hidden("count", product.Count)
-                            <input class="cartProductUpdate" type="submit" value="Update">
-                        }
-                        @using (Html.BeginForm("RemoveItemFromCart", "Shop"))
-                        {
-                            @Html.Hidden("productId", product.Id)
-                            <input class="cartProductRemove" type="submit" value="Remove">
-                        }
-                    </span>
-                </li>
-
-                totalPrice += product.Price * product.Count;
-            }
+            <div class="cartProduct">
+                <div class="productName">
+                    @product.Name
+                </div>
+                <div class="productPrice">
+                    $@product.Price x <input data-counterproductid="@product.Id" class="productCount" type="number" value="@product.Count" min="1" max="10">
+                </div>
+                <div class="productActions" data-controlsproductid="@product.Id">
+                    @using (Html.BeginForm("UpdateCartItem", "Shop"))
+                    {
+                        @Html.Hidden("productId", product.Id)
+                        @Html.Hidden("count", product.Count)
+                        <input class="cartProductUpdate" type="submit" value="Update">
+                    }
+                    @using (Html.BeginForm("RemoveItemFromCart", "Shop"))
+                    {
+                        @Html.Hidden("productId", product.Id)
+                        <input class="cartProductRemove" type="submit" value="Remove">
+                    }
+                </div>
+            </div>
+            totalPrice += product.Price * product.Count;
         }
-        else
-        {
-            <li class="cartEmptyNotice">Your cart is empty</li>
-        }
+    }
+    else
+    {
+        <div class="cartEmptyNotice">Your cart is empty</div>
+    }
 
-        <li class="cartProductHeader">
-            <span class="cartProductTotalSpacer"></span>
-            <span class="cartProductTotalPrice">Total: $@totalPrice</span>
+    <hr class="cartDivider">
+    <div class="cartProduct productSummary">
+        <div class="productName"></div>
+        <div class="productPrice productPriceTotal">
+            <b>Total:</b> $@totalPrice
+        </div>
+        <div class="productActions productActionsAll">
             @using (Html.BeginForm("EmptyCart", "Shop"))
             {
                 <input class="cartProductRemoveAll" type="submit" value="Empty cart">
             }
-        </li>
-    </ul>
-    <a href="/shop/checkout/">Checkout</a>
-@*    @using (Html.BeginForm("Checkout", "Shop"))*@
-@*    {*@
-@*        @Html.Hidden("Cart", Model)*@
-@*        <input class="cartCheckout" type="submit" value="Checkout">*@
-@*    }*@
+        </div>
+    </div>
+    @if (Model != null)
+    {
+        using (Html.BeginForm("Checkout", "Shop"))
+        {
+            @Html.Hidden("Cart", Model)
+            <input class="cartCheckout" type="submit" value="Checkout">
+        }
+    }
 </div>
