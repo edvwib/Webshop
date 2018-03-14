@@ -60,10 +60,6 @@
     </div>
     @if (Model != null)
     {
-        using (Html.BeginForm("Checkout", "Shop"))
-        {
-            @Html.Hidden("Cart", Model)
-            <input class="cartCheckout" type="submit" value="Checkout">
-        }
+        <a href="/shop/checkout/" class="cartCheckout">Checkout</a>
     }
 </div>

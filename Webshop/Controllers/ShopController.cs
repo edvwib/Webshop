@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Dapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.Sqlite;
 using Webshop.Models;
@@ -74,7 +70,7 @@ namespace Webshop.Controllers
         public IActionResult Cart()
         {
             _guid = GetGuidCookie();
-            List<UserCartViewModel> userCart = getCart(_guid);
+            List<UserCartViewModel> userCart = GetCart(_guid);
 
 
             return View(userCart);
@@ -128,8 +124,12 @@ namespace Webshop.Controllers
         [HttpPost]
         public IActionResult Checkout(CheckoutViewModel address)
         {
-            //return RedirectToAction("ConfirmOrder", address);
-            return View();
+            return RedirectToAction("ConfirmOrder", address);
+        }
+
+        public IActionResult ConfirmOrder(CheckoutViewModel address)
+        {
+            return View(new OrderViewModel{Address = address, UserCart = GetCart(GetGuidCookie())});
         }
 
         public string GetGuidCookie()
@@ -145,7 +145,7 @@ namespace Webshop.Controllers
             return guidCookie;
         }
 
-        public List<UserCartViewModel> getCart(string _guid)
+        public List<UserCartViewModel> GetCart(string _guid)
         {
             List<UserCartViewModel> userCart = new List<UserCartViewModel>();
             List<CartViewModel> cart = new List<CartViewModel>();
@@ -169,7 +169,7 @@ namespace Webshop.Controllers
                     if (p == null)
                         continue;
 
-                    int count = c == null ? 1 : c.Count; //If c=null default to 1, else get the value
+                    int count = c == null ? 1 : c.Count;
 
                     userCart.Add(new UserCartViewModel()
                     {

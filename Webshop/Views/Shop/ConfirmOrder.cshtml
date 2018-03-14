@@ -1,0 +1,31 @@
+﻿@model OrderViewModel
+
+@{
+    decimal totalPrice = 0;
+}
+
+<p>Thanks for your order, below is a summary.</p>
+
+<div>
+    @Model.Address.Street @Model.Address.StreetNumber
+    <br>
+    @Model.Address.Zip @Model.Address.City, @Model.Address.Country
+</div>
+
+<br>
+
+<div>
+    @foreach(var product in Model.UserCart)
+    {
+        <div>
+            <div>
+                @product.Name
+            </div>
+            <div>
+                $@product.Price x @product.Count
+            </div>
+        </div>
+
+        totalPrice += product.Price * product.Count;
+    }
+</div>
