@@ -134,7 +134,7 @@ namespace Webshop.Controllers
 
         public string GetGuidCookie()
         {
-            var guidCookie = Request.Cookies["guid"];
+            string guidCookie = Request.Cookies["guid"];
 
             if (guidCookie != null)
                 return guidCookie;
