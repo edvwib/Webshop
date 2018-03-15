@@ -18,9 +18,9 @@ namespace Webshop.Core.Services.Implementations
             return _cartRepository.GetAll(guid);
         }
 
-        public CartModel Get(string guid, int id)
+        public CartModel Get(string guid, int productId)
         {
-            return _cartRepository.Get(guid, id);
+            return _cartRepository.Get(guid, productId);
         }
 
         public bool Add(string guid, int productId)

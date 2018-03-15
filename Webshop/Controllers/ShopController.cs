@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Dapper;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Data.Sqlite;
 using Webshop.Core.Repositories.Implementations;
 using Webshop.Core.Services.Implementations;
 using Webshop.Models;

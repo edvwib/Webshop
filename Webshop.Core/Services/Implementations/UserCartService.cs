@@ -51,9 +51,9 @@ namespace Webshop.Core.Services.Implementations
             return userCart;
         }
 
-        public UserCartModel Get(string guid, int id)
+        public UserCartModel Get(string guid, int productId)
         {
-            var cart = _cartService.Get(guid, id);
+            var cart = _cartService.Get(guid, productId);
             var product = _productService.Get(cart.ProductId);
 
             if (cart == null || product == null)

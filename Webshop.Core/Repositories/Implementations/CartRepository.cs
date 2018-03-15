@@ -45,7 +45,7 @@ namespace Webshop.Core.Repositories.Implementations
                     connection.Execute("INSERT INTO carts (guid, productId, count) VALUES (@guid, @productId, 1)",
                         new {guid, productId});
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return false;
                 }
@@ -63,7 +63,7 @@ namespace Webshop.Core.Repositories.Implementations
                     connection.Execute("UPDATE carts SET count=count+1 WHERE guid=@guid AND productId=@productId",
                         new {guid, productId});
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return false;
                 }
@@ -92,7 +92,7 @@ namespace Webshop.Core.Repositories.Implementations
                     connection.Execute("DELETE FROM carts WHERE guid=@guid AND productId=@productId",
                         new {guid, productId});
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return false;
                 }
@@ -110,7 +110,7 @@ namespace Webshop.Core.Repositories.Implementations
                     connection.Execute("DELETE FROM carts WHERE guid=@guid",
                         new {guid});
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return false;
                 }
