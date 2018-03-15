@@ -7,20 +7,25 @@
 <p>Thanks for your order, below is a summary.</p>
 
 <div>
+    <b>Shipping address:</b>
+    <br>
+    @Model.Address.FirstName @Model.Address.LastName
+    <br>
     @Model.Address.Street @Model.Address.StreetNumber
     <br>
     @Model.Address.Zip @Model.Address.City, @Model.Address.Country
 </div>
 
-<br>
+<hr>
 
 <div>
-    @foreach(var product in Model.UserCart)
+    <b>Order summary:</b>
+    @foreach (var product in Model.UserCart)
     {
         <div>
-            <div>
+            <a href="/Shop/Product/@product.Id">
                 @product.Name
-            </div>
+            </a>
             <div>
                 $@product.Price x @product.Count
             </div>
@@ -28,4 +33,8 @@
 
         totalPrice += product.Price * product.Count;
     }
+</div>
+<br>
+<div>
+    <b>Total:</b> $@totalPrice
 </div>

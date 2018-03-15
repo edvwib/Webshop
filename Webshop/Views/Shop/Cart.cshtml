@@ -17,9 +17,9 @@
         foreach (var product in Model)
         {
             <div class="cartProduct">
-                <div class="productName">
+                <a class="productName" href="/Shop/Product/@product.Id">
                     @product.Name
-                </div>
+                </a>
                 <div class="productPrice">
                     $@product.Price x <input data-counterproductid="@product.Id" class="productCount" type="number" value="@product.Count" min="1" max="10">
                 </div>
