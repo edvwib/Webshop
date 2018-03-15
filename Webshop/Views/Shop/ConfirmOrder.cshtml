@@ -4,37 +4,27 @@
     decimal totalPrice = 0;
 }
 
-<p>Thanks for your order, below is a summary.</p>
+<div class="row mx-1">
 
-<div>
-    <b>Shipping address:</b>
-    <br>
-    @Model.Address.FirstName @Model.Address.LastName
-    <br>
-    @Model.Address.Street @Model.Address.StreetNumber
-    <br>
-    @Model.Address.Zip @Model.Address.City, @Model.Address.Country
-</div>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Thanks for your order!</h4>
+            <p class="card-text"><b>Email:</b> @Model.Address.Email</p>
+            <p class="card-text"><b>Shipping address:</b></p>
+            <p class="card-text">@Model.Address.Name<br>
+                @Model.Address.Street<br>
+                @Model.Address.Zip @Model.Address.City, @Model.Address.Country</p>
 
-<hr>
-
-<div>
-    <b>Order summary:</b>
-    @foreach (var product in Model.UserCart)
-    {
-        <div>
-            <a href="/Shop/Product/@product.Id">
-                @product.Name
-            </a>
-            <div>
-                $@product.Price x @product.Count
-            </div>
+            <p class="card-text"><b>Order summary:</b></p>
+            @foreach (var product in Model.UserCart)
+            {
+                <p class="card-text">
+                    <a href="/shop/product/@product.Id">@product.Name</a> -
+                    $@product.Price x @product.Count
+                </p>
+                totalPrice += product.Price * product.Count;
+            }
+            <p class="card-text"><b>Total:</b> $@totalPrice</p>
         </div>
-
-        totalPrice += product.Price * product.Count;
-    }
-</div>
-<br>
-<div>
-    <b>Total:</b> $@totalPrice
+    </div>
 </div>

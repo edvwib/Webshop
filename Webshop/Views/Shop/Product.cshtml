@@ -1,19 +1,20 @@
 ﻿@model Webshop.Core.Models.ProductModel
 
-<div class="product" data-productid="@Model.Id">
-    <h2 class="productName">
-        @Model.Name
-    </h2>
+<div class="row mx-1">
 
-    <p class="productDescription">
-        @Model.Description
-    </p>
+    <div class="card" data-productid="@Model.Id">
+        <a href="/Shop/Product/@Model.Id">
+            <img class="img-fluid" src="/../images/@(Model.Id).jpg" alt="@Model.Name (image)">
+        </a>
 
-    <img class="productImage" src="/../images/@(Model.Id).jpg" alt="product image">
-
-    @using (Html.BeginForm("AddToCart", "Shop"))
-    {
-        @Html.Hidden("productId", Model.Id)
-        <input class="productPrice" type="submit" value="$@Model.Price" data-productprice="$@Model.Price">
-    }
+        <div class="card-body">
+            <h4 class="card-title">@Model.Name - $@Model.Price</h4>
+            <p class="card-text">@Model.Description</p>
+            @using (Html.BeginForm("AddToCart", "Shop"))
+            {
+                @Html.Hidden("productId", Model.Id)
+                <input class="btn btn-primary" type="submit" value="Add To Cart" data-productprice="$@Model.Price">
+            }
+        </div>
+    </div>
 </div>

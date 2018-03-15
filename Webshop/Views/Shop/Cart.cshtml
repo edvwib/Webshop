@@ -6,61 +6,61 @@
     decimal totalPrice = 0;
 }
 
-<div id="cart">
-    <div class="cartProduct productHeader">
-        <div class="productName">Product</div>
-        <div class="productPrice">Price</div>
-        <div class="productActions">Actions</div>
-    </div>
-    <hr class="cartDivider">
-    @if (Model != null)
-    {
-        foreach (var product in Model)
+<div class="table-responsive">
+    <table class="table product-table">
+        <thead class="">
+        <tr>
+            <th class="font-weight-bold">Product</th>
+            <th class="font-weight-bold">Price</th>
+            <th class="font-weight-bold">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model != null)
         {
-            <div class="cartProduct">
-                <a class="productName" href="/Shop/Product/@product.Id">
-                    @product.Name
-                </a>
-                <div class="productPrice">
-                    $@product.Price x <input data-counterproductid="@product.Id" class="productCount" type="number" value="@product.Count" min="1" max="10">
-                </div>
-                <div class="productActions" data-controlsproductid="@product.Id">
-                    @using (Html.BeginForm("UpdateCartItem", "Shop"))
-                    {
-                        @Html.Hidden("productId", product.Id)
-                        @Html.Hidden("count", product.Count)
-                        <input class="cartProductUpdate" type="submit" value="Update">
-                    }
-                    @using (Html.BeginForm("RemoveItemFromCart", "Shop"))
-                    {
-                        @Html.Hidden("productId", product.Id)
-                        <input class="cartProductRemove" type="submit" value="Remove">
-                    }
-                </div>
-            </div>
-            totalPrice += product.Price * product.Count;
-        }
-    }
-    else
-    {
-        <div class="cartEmptyNotice">Your cart is empty</div>
-    }
-
-    <hr class="cartDivider">
-    <div class="cartProduct productSummary">
-        <div class="productName"></div>
-        <div class="productPrice productPriceTotal">
-            <b>Total:</b> $@totalPrice
-        </div>
-        <div class="productActions productActionsAll">
-            @using (Html.BeginForm("EmptyCart", "Shop"))
+            foreach (var product in Model)
             {
-                <input class="cartProductRemoveAll" type="submit" value="Empty cart">
+                totalPrice += product.Price * product.Count;
+                <tr>
+                    <th><a href="/Shop/Product/@product.Id">@product.Name</a></th>
+                    <th>
+                        $@product.Price x
+                        <input data-counterproductid="@product.Id" class="form-control" type="number" value="@product.Count" min="1" max="10">
+                    </th>
+                    <th>
+                        @using (Html.BeginForm("UpdateCartItem", "Shop"))
+                        {
+                            @Html.Hidden("productId", product.Id)
+                            @Html.Hidden("count", product.Count)
+                            <input class="btn btn-primary" type="submit" value="Update">
+                        }
+                        @using (Html.BeginForm("RemoveItemFromCart", "Shop"))
+                        {
+                            @Html.Hidden("productId", product.Id)
+                            <input class="btn btn-warning" type="submit" value="Remove">
+                        }
+                    </th>
+                </tr>
             }
-        </div>
-    </div>
-    @if (Model != null)
-    {
-        <a href="/shop/checkout/" class="cartCheckout">Checkout</a>
-    }
+        }
+        <tr>
+            <td></td>
+            <td><b>Total:</b> $@totalPrice</td>
+            <td>
+                @if (Model != null)
+                {
+                    <a href="/shop/checkout/" class="btn btn-primary">Checkout</a>
+                }
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
+
+@if (Model != null)
+{
+    using (Html.BeginForm("EmptyCart", "Shop"))
+    {
+        <input class="btn btn-danger" type="submit" value="Empty cart">
+    }
+}
