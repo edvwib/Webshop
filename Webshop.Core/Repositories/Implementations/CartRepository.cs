@@ -89,7 +89,7 @@ namespace Webshop.Core.Repositories.Implementations
             {
                 try
                 {
-                    connection.Execute("DELETE FROM carts WHERE guid=@_guid AND productId=@productId",
+                    connection.Execute("DELETE FROM carts WHERE guid=@guid AND productId=@productId",
                         new {guid, productId});
                 }
                 catch (Exception e)
