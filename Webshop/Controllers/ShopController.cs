@@ -1,7 +1,11 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Net;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Webshop.Core.Models;
 using Webshop.Core.Repositories.Implementations;
 using Webshop.Core.Services.Implementations;
 using Webshop.Models;
@@ -41,7 +45,8 @@ namespace Webshop.Controllers
 
         public IActionResult AddToCart(int productId)
         {
-            _cartService.Add(GetGuidCookie(), productId);
+            if (!_cartService.Add(GetGuidCookie(), productId))
+                return BadRequest();
 
             return RedirectToAction("Cart");
         }
@@ -85,14 +90,22 @@ namespace Webshop.Controllers
         }
 
         [HttpPost]
-        public IActionResult Checkout(CheckoutViewModel address)
+        public IActionResult Checkout(CheckoutModel address)
         {
-            return RedirectToAction("ConfirmOrder", address);
+            var order = new OrderModel
+            {
+                Address = address,
+                UserCart = _userCartService.GetAll(GetGuidCookie())
+            };
+
+//            _orderService.AddOrder(order)
+
+            return RedirectToAction("ConfirmOrder", order);
         }
 
-        public IActionResult ConfirmOrder(CheckoutViewModel address)
+        public IActionResult ConfirmOrder(OrderModel order)
         {
-            return View(new OrderViewModel{Address = address, UserCart = _userCartService.GetAll(GetGuidCookie())});
+            return View(order);
         }
 
         public string GetGuidCookie()

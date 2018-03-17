@@ -1,6 +1,6 @@
 ﻿namespace Webshop.Models
 {
-    public class CheckoutViewModel
+    public class CheckoutModel
     {
         public string Email { get; set; }
         public string Name { get; set; }

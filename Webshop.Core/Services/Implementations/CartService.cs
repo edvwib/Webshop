@@ -25,6 +25,9 @@ namespace Webshop.Core.Services.Implementations
 
         public bool Add(string guid, int productId)
         {
+            if (productId <= 0)
+                return false;
+
             //Check if item is already in cart, if it is then increment
             var cart = _cartRepository.Get(guid, productId);
 
