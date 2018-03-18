@@ -1,8 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Globalization;
-using System.Net;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Webshop.Core.Models;
@@ -108,7 +105,7 @@ namespace Webshop.Controllers
             return View(order);
         }
 
-        public string GetGuidCookie()
+        private string GetGuidCookie()
         {
             string guidCookie = Request.Cookies["guid"];
 
