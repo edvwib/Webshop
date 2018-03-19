@@ -25,15 +25,15 @@
                 <tr>
                     <th><a href="/Shop/Product/@product.Id">@product.Name</a></th>
                     <th>
-                        $@product.Price x
-                        <input data-counterproductid="@product.Id" class="form-control" type="number" value="@product.Count" min="1" max="10">
+                        <span>$@product.Price x</span>
+                        <input data-counterproductid="@product.Id" class="form-control" style="display: inline !important; width: auto;" type="number" value="@product.Count" min="1" max="10">
                     </th>
-                    <th>
+                    <th class="btn-group">
                         @using (Html.BeginForm("UpdateCartItem", "Shop"))
                         {
                             @Html.Hidden("productId", product.Id)
                             @Html.Hidden("count", product.Count)
-                            <input class="btn btn-primary" type="submit" value="Update">
+                            <input class="mr-3 btn btn-primary" type="submit" value="Update">
                         }
                         @using (Html.BeginForm("RemoveItemFromCart", "Shop"))
                         {
