@@ -97,11 +97,6 @@ namespace Webshop.Controllers
 
 //            _orderService.AddOrder(order)
 
-            return RedirectToAction("ConfirmOrder", order);
-        }
-
-        public IActionResult ConfirmOrder(OrderModel order)
-        {
             return View(order);
         }
 
