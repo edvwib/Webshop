@@ -95,8 +95,6 @@ namespace Webshop.Controllers
                 UserCart = _userCartService.GetAll(GetGuidCookie())
             };
 
-//            _orderService.AddOrder(order)
-
             return View(order);
         }
 

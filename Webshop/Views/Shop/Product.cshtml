@@ -9,7 +9,7 @@
         <div class="card-body">
             <h4 class="card-title">@Model.Name - $@Model.Price</h4>
             <p class="card-text">@Model.Description</p>
-            @using (Html.BeginForm("AddToCart", "Shop"))
+            @using (Html.BeginForm("AddToCart", "Shop", FormMethod.Post, new {@name="AddToCartForm"}))
             {
                 @Html.Hidden("productId", Model.Id)
                 <input class="btn btn-primary" type="submit" value="Add To Cart" data-productprice="$@Model.Price">
