@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using Webshop.Core.Models;
+using Webshop.Core.Repositories;
 using Webshop.Core.Repositories.Implementations;
 
 namespace Webshop.Core.Services.Implementations
 {
     public class ProductService
     {
-        private readonly ProductsRepository _productsRepository;
+        private readonly IProductsRepository _productsRepository;
 
-        public ProductService(ProductsRepository productsRepository)
+        public ProductService(IProductsRepository productsRepository)
         {
             _productsRepository = productsRepository;
         }

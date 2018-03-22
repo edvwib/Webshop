@@ -6,7 +6,7 @@ using Webshop.Core.Models;
 
 namespace Webshop.Core.Repositories.Implementations
 {
-    public class ProductsRepository
+    public class ProductsRepository : IProductsRepository
     {
         private readonly string _connectionString;
 
@@ -33,7 +33,6 @@ namespace Webshop.Core.Repositories.Implementations
                     new {id});
             }
         }
-
 
 
 
