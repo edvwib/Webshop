@@ -13,7 +13,6 @@ namespace Webshop.Controllers
     {
         private readonly ProductService _productService;
         private readonly CartService _cartService;
-        private readonly UserCartService _userCartService;
 
         private string _guid;
 
@@ -22,7 +21,6 @@ namespace Webshop.Controllers
             var connectionString = config.GetConnectionString("ConnectionString");
             _productService = new ProductService(new ProductsRepository(connectionString));
             _cartService = new CartService(new CartRepository(connectionString));
-            _userCartService = new UserCartService(config);
         }
 
         public IActionResult Index()
@@ -50,7 +48,7 @@ namespace Webshop.Controllers
 
         public IActionResult Cart()
         {
-            return View(_userCartService.GetAll(GetGuidCookie()));
+            return View(_cartService.GetAll(GetGuidCookie()));
         }
 
         public IActionResult RemoveItemFromCart(int productId)
@@ -92,7 +90,7 @@ namespace Webshop.Controllers
             var order = new OrderModel
             {
                 Address = address,
-                UserCart = _userCartService.GetAll(GetGuidCookie())
+                Cart = _cartService.GetAll(GetGuidCookie())
             };
 
             return View(order);

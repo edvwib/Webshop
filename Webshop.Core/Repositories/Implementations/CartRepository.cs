@@ -21,7 +21,9 @@ namespace Webshop.Core.Repositories.Implementations
             using (var connection = new SqliteConnection(_connectionString))
             {
                 return connection.Query<CartModel>(
-                    "SELECT * FROM carts WHERE guid=@guid",
+                    "SELECT c.guid, c.productId, c.count, p.* " +
+                    "FROM carts AS c, products AS p " +
+                    "WHERE c.guid=@guid AND c.productId=p.id",
                     new {guid}).ToList();
             }
         }
@@ -31,7 +33,11 @@ namespace Webshop.Core.Repositories.Implementations
             using (var connection = new SqliteConnection(_connectionString))
             {
                 return connection.QuerySingleOrDefault<CartModel>(
-                    "SELECT * FROM carts WHERE guid=@guid AND productId=@productId",
+                    "SELECT c.guid, c.productId, c.count, p.* " +
+                    "FROM carts AS c, products AS p " +
+                    "WHERE c.productId=@productId " +
+                    "AND c.guid=@guid " +
+                    "AND c.productId=p.Id",
                     new {guid, productId});
             }
         }
