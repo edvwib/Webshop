@@ -20,7 +20,8 @@ namespace Webshop.Core.Repositories.Implementations
             using (var connection = new SqliteConnection(_connectionString))
             {
                 return connection.Query<ProductModel>(
-                    "SELECT * FROM products").ToList();
+                    "SELECT * FROM products"
+                    ).ToList();
             }
         }
 
@@ -29,7 +30,8 @@ namespace Webshop.Core.Repositories.Implementations
             using (var connection = new SqliteConnection(_connectionString))
             {
                 return connection.QuerySingleOrDefault<ProductModel>(
-                    "SELECT * FROM products WHERE Id=@id",
+                    "SELECT * FROM products " +
+                    "WHERE Id=@id",
                     new {id});
             }
         }
@@ -38,7 +40,7 @@ namespace Webshop.Core.Repositories.Implementations
 
 
 
-        public bool Create(ProductModel product)
+        public bool Create(ProductModel producort)
         {
             return true;
         }

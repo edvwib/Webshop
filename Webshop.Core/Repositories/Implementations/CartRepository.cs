@@ -48,7 +48,10 @@ namespace Webshop.Core.Repositories.Implementations
             {
                 try
                 {
-                    connection.Execute("INSERT INTO carts (guid, productId, count) VALUES (@guid, @productId, 1)",
+                    connection.Execute(
+                        "INSERT INTO carts " +
+                        "(guid, productId, count) " +
+                        "VALUES (@guid, @productId, 1)",
                         new {guid, productId});
                 }
                 catch (Exception)
@@ -66,7 +69,11 @@ namespace Webshop.Core.Repositories.Implementations
             {
                 try
                 {
-                    connection.Execute("UPDATE carts SET count=count+1 WHERE guid=@guid AND productId=@productId",
+                    connection.Execute(
+                        "UPDATE carts " +
+                        "SET count=count+1 " +
+                        "WHERE guid=@guid " +
+                        "AND productId=@productId",
                         new {guid, productId});
                 }
                 catch (Exception)
@@ -82,7 +89,11 @@ namespace Webshop.Core.Repositories.Implementations
         {
             using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Execute("UPDATE carts SET count=@count WHERE guid=@guid AND productId=@productId",
+                connection.Execute(
+                    "UPDATE carts " +
+                    "SET count=@count " +
+                    "WHERE guid=@guid " +
+                    "AND productId=@productId",
                     new {count, guid, productId});
             }
 
@@ -95,7 +106,10 @@ namespace Webshop.Core.Repositories.Implementations
             {
                 try
                 {
-                    connection.Execute("DELETE FROM carts WHERE guid=@guid AND productId=@productId",
+                    connection.Execute(
+                        "DELETE FROM carts " +
+                        "WHERE guid=@guid " +
+                        "AND productId=@productId",
                         new {guid, productId});
                 }
                 catch (Exception)
@@ -113,7 +127,9 @@ namespace Webshop.Core.Repositories.Implementations
             {
                 try
                 {
-                    connection.Execute("DELETE FROM carts WHERE guid=@guid",
+                    connection.Execute(
+                        "DELETE FROM carts " +
+                        "WHERE guid=@guid",
                         new {guid});
                 }
                 catch (Exception)
