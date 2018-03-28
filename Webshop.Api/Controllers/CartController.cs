@@ -22,19 +22,28 @@ namespace Webshop.Api.Controllers
             _cartService = new CartService(new CartRepository(connectionString));
         }
 
-        [HttpGet("{guid}")]
-        public List<CartModel> GetAll(string guid)
+        [HttpGet]
+        public IEnumerable<CartModel> Get(string guid)
         {
             return _cartService.GetAll(guid);
         }
 
-        [HttpPost("{guid}, {productId}")]
-        public HttpStatusCode AddToCart(string guid, int productId)
+        [HttpPost]
+        public IActionResult Post([FromBody] CartModel AddToCart)
         {
-            if (_cartService.Add(guid, productId))
-                return HttpStatusCode.OK;
+            if (_cartService.Add(AddToCart.Guid, AddToCart.Id))
+                return StatusCode(200);
 
-            return HttpStatusCode.BadRequest;
+            return StatusCode(418);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] CartModel AddToCart)
+        {
+            if (_cartService.Add(AddToCart.Guid, AddToCart.Id))
+                return StatusCode(200);
+
+            return StatusCode(418);
         }
     }
 }
