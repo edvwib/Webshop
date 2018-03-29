@@ -19,31 +19,51 @@ namespace Webshop.Api.Controllers
         public CartController(IConfiguration config)
         {
             var connectionString = config.GetConnectionString("ConnectionString");
-            _cartService = new CartService(new CartRepository(connectionString));
+            _cartService = new CartService(config, new CartRepository(connectionString));
         }
 
-        [HttpGet]
+        [HttpGet("{guid}")]
         public IEnumerable<CartModel> Get(string guid)
         {
             return _cartService.GetAll(guid);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] CartModel AddToCart)
+        public IActionResult Post([FromBody] CartModel addToCart)
         {
-            if (_cartService.Add(AddToCart.Guid, AddToCart.Id))
+            if (_cartService.Add(addToCart.Guid, addToCart.Id))
                 return StatusCode(200);
 
-            return StatusCode(418);
+            return StatusCode(500);
         }
 
-        [HttpPost]
-        public IActionResult Post([FromBody] CartModel AddToCart)
+        [HttpDelete]
+        public IActionResult Delete([FromBody] CartModel removeFromCart)
         {
-            if (_cartService.Add(AddToCart.Guid, AddToCart.Id))
+            if (_cartService.Remove(removeFromCart.Guid, removeFromCart.Id))
                 return StatusCode(200);
 
-            return StatusCode(418);
+            return StatusCode(500);
+        }
+
+        [HttpDelete("{guid}")]
+        public IActionResult Delete([FromBody] string guid)
+        {
+            return StatusCode(501);
+
+            if (_cartService.Empty(guid))
+                return StatusCode(200);
+
+            return StatusCode(500);
+        }
+
+        [HttpPatch]
+        public IActionResult Patch([FromBody] CartModel updateCount)
+        {
+            if (_cartService.UpdateCount(updateCount.Guid, updateCount.Id, updateCount.Count))
+                return StatusCode(200);
+
+            return StatusCode(500);
         }
     }
 }

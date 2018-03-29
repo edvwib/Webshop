@@ -34,6 +34,8 @@ namespace Webshop.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
             app.UseMvc();
         }
     }
