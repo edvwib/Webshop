@@ -52,13 +52,13 @@ namespace Webshop.Core.UnitTests.Services
         public void Get_GivenValidId_ReturnsExpectedProduct()
         {
             //Arrange
-            const int Id = 3;
-            var expectedProductItem = new ProductModel { Id = Id };
+            const int id = 3;
+            var expectedProductItem = new ProductModel { Id = id };
 
-            A.CallTo(() => _productsRepository.Get(Id)).Returns(expectedProductItem);
+            A.CallTo(() => _productsRepository.Get(id)).Returns(expectedProductItem);
 
             //Act
-            var result = _productService.Get(Id);
+            var result = _productService.Get(id);
 
             //Assert
             Assert.That(result, Is.EqualTo(expectedProductItem));
