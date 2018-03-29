@@ -13,6 +13,7 @@ namespace Webshop.Controllers
     {
         private readonly ProductService _productService;
         private readonly CartService _cartService;
+        private readonly OrderService _orderService;
 
         private string _guid;
 
@@ -21,6 +22,7 @@ namespace Webshop.Controllers
             var connectionString = config.GetConnectionString("ConnectionString");
             _productService = new ProductService(new ProductsRepository(connectionString));
             _cartService = new CartService(config, new CartRepository(connectionString));
+            _orderService = new OrderService(config, new OrderRepository(connectionString));
         }
 
         public IActionResult Index()
@@ -85,13 +87,23 @@ namespace Webshop.Controllers
         }
 
         [HttpPost]
-        public IActionResult Checkout(CheckoutModel address)
+        public IActionResult Checkout(OrderModel address)
         {
             var order = new OrderModel
             {
-                Address = address,
-                Cart = _cartService.GetAll(GetGuidCookie())
+                Guid = GetGuidCookie(),
+                Email = address.Email,
+                Name = address.Name,
+                Street = address.Street,
+                Zip = address.Zip,
+                City = address.City,
+                Country = address.Country
             };
+
+            _orderService.AddAddress(order);
+            _orderService.AddOrder(order.Guid);
+
+            order.Cart = _cartService.GetAll(GetGuidCookie());
 
             return View(order);
         }
