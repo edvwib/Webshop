@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Webshop.Core.Models;
 
 namespace Webshop.Core.Models
 {

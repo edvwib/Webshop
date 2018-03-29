@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Webshop.Core.Models;
 using Webshop.Core.Repositories;
-using Webshop.Core.Repositories.Implementations;
 
 namespace Webshop.Core.Services.Implementations
 {
