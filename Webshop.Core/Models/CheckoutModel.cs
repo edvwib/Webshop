@@ -1,4 +1,4 @@
-﻿namespace Webshop.Models
+﻿namespace Webshop.Core.Models
 {
     public class CheckoutModel
     {

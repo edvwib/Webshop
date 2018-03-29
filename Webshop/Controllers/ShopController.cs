@@ -20,7 +20,7 @@ namespace Webshop.Controllers
         {
             var connectionString = config.GetConnectionString("ConnectionString");
             _productService = new ProductService(new ProductsRepository(connectionString));
-            _cartService = new CartService(new CartRepository(connectionString));
+            _cartService = new CartService(config, new CartRepository(connectionString));
         }
 
         public IActionResult Index()

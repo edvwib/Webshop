@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Webshop.Models;
+using Webshop.Core.Models;
 
 namespace Webshop.Core.Models
 {
@@ -9,4 +9,3 @@ namespace Webshop.Core.Models
         public List<CartModel> Cart { get; set; }
     }
 }
-

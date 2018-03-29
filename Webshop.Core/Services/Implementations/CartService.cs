@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Cache;
+using Microsoft.Extensions.Configuration;
 using Webshop.Core.Models;
 using Webshop.Core.Repositories.Implementations;
 
@@ -8,10 +9,14 @@ namespace Webshop.Core.Services.Implementations
     public class CartService
     {
         private readonly CartRepository _cartRepository;
+        private readonly ProductService _productService;
 
-        public CartService(CartRepository cartRepository)
+        public CartService(IConfiguration config, CartRepository cartRepository)
         {
+            var connectionString = config.GetConnectionString("ConnectionString");
+
             _cartRepository = cartRepository;
+            _productService = new ProductService(new ProductsRepository(connectionString));
         }
 
         public List<CartModel> GetAll(string guid)
@@ -26,35 +31,42 @@ namespace Webshop.Core.Services.Implementations
 
         public bool Add(string guid, int productId)
         {
-            if (productId <= 0)
+            //Check if product exists in database
+            if (_productService.Get(productId) == null)
                 return false;
 
-            //Check if item is already in cart, if it is then increment
-            var cart = _cartRepository.Get(guid, productId);
+            //item already in cart = increment. Else add it
+            var inCart = _cartRepository.Get(guid, productId);
 
-            if (cart != null)
-                return _cartRepository.Update(guid, productId);
+            if (inCart == null)
+                return _cartRepository.Add(guid, productId);
 
-            return _cartRepository.Add(guid, productId);
-        }
-
-        public bool Update(string guid, int productId)
-        {
-            return _cartRepository.Update(guid, productId);
+            return _cartRepository.UpdateCount(guid, productId, ++inCart.Count);
         }
 
         public bool UpdateCount(string guid, int productId, int count)
         {
+            if (count < 0)
+                return false;
+            if (count == 0)
+                return Remove(guid, productId);
+
             return _cartRepository.UpdateCount(guid, productId, count);
         }
 
         public bool Remove(string guid, int productId)
         {
+            if (productId < 1)
+                return false;
+
             return _cartRepository.Remove(guid, productId);
         }
 
         public bool Empty(string guid)
         {
+            if (guid == null)
+                return false;
+
             return _cartRepository.Empty(guid);
         }
     }

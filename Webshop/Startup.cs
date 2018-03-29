@@ -34,8 +34,6 @@ namespace Webshop
 
       app.UseStaticFiles();
 
-      app.UseCors(Options => Options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
       app.UseMvc(routes =>
       {
         routes.MapRoute(

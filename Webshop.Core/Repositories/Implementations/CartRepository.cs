@@ -63,7 +63,7 @@ namespace Webshop.Core.Repositories.Implementations
             return true;
         }
 
-        public bool Update(string guid, int productId)
+        public bool UpdateCount(string guid, int productId, int count)
         {
             using (var connection = new SqliteConnection(_connectionString))
             {
@@ -71,30 +71,15 @@ namespace Webshop.Core.Repositories.Implementations
                 {
                     connection.Execute(
                         "UPDATE carts " +
-                        "SET count=count+1 " +
+                        "SET count=@count " +
                         "WHERE guid=@guid " +
                         "AND productId=@productId",
-                        new {guid, productId});
+                        new {count, guid, productId});
                 }
                 catch (Exception)
                 {
                     return false;
                 }
-            }
-
-            return true;
-        }
-
-        public bool UpdateCount(string guid, int productId, int count)
-        {
-            using (var connection = new SqliteConnection(_connectionString))
-            {
-                connection.Execute(
-                    "UPDATE carts " +
-                    "SET count=@count " +
-                    "WHERE guid=@guid " +
-                    "AND productId=@productId",
-                    new {count, guid, productId});
             }
 
             return true;
