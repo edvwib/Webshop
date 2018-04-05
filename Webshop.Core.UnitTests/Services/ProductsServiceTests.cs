@@ -10,36 +10,36 @@ namespace Webshop.Core.UnitTests.Services
     public class ProductsServiceTests
     {
         private ProductService _productService;
-        private IProductsRepository _productsRepository;
+        private IProductRepository _productRepository;
 
         [SetUp]
         public void SetUp()
         {
-            _productsRepository = A.Fake<IProductsRepository>();
-            _productService = new ProductService(_productsRepository);
+            _productRepository = A.Fake<IProductRepository>();
+            _productService = new ProductService(_productRepository);
         }
 
         [Test]
         public void GetAll_ReturnsProductList()
         {
             //Arrange
-            var products = new List<ProductModel>
+            var expectedProducts = new List<ProductModel>
             {
                 new ProductModel { Id = 1 }
             };
 
-            A.CallTo(() => _productsRepository.GetAll()).Returns(products);
+            A.CallTo(() => _productRepository.GetAll()).Returns(expectedProducts);
 
             //Act
             var result = _productService.GetAll();
 
             //Assert
-            Assert.That(result, Is.EqualTo(products));
+            Assert.That(result, Is.EqualTo(expectedProducts));
         }
 
         [TestCase(0)]
         [TestCase(-1)]
-        public void Get_GivenIdLessThanOne_ReturnsNull(int id)
+        public void Get_GivenInvalidId_ReturnsNull(int id)
         {
             //Act
             var result = _productService.Get(id);
@@ -55,7 +55,7 @@ namespace Webshop.Core.UnitTests.Services
             const int id = 3;
             var expectedProductItem = new ProductModel { Id = id };
 
-            A.CallTo(() => _productsRepository.Get(id)).Returns(expectedProductItem);
+            A.CallTo(() => _productRepository.Get(id)).Returns(expectedProductItem);
 
             //Act
             var result = _productService.Get(id);
