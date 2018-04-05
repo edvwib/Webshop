@@ -2,10 +2,11 @@
 using Dapper;
 using Microsoft.Data.Sqlite;
 using Webshop.Core.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Webshop.Core.Repositories.Implementations
 {
-    public class OrderRepository
+    public class OrderRepository : IOrderRepository
     {
         private readonly string _connectionString;
 

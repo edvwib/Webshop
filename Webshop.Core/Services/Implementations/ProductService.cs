@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Webshop.Core.Models;
 using Webshop.Core.Repositories;
+using Webshop.Core.Repositories.Implementations;
 
 namespace Webshop.Core.Services.Implementations
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
-        private readonly IProductsRepository _productsRepository;
+        private readonly IProductRepository _productsRepository;
 
-        public ProductService(IProductsRepository productsRepository)
+        public ProductService(IProductRepository productsRepository)
         {
             _productsRepository = productsRepository;
         }

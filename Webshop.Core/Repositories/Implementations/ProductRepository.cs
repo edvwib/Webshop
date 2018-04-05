@@ -7,11 +7,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace Webshop.Core.Repositories.Implementations
 {
-    public class ProductsRepository : IProductsRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly string _connectionString;
 
-        public ProductsRepository(string connectionString)
+        public ProductRepository(string connectionString)
         {
             _connectionString = connectionString;
         }

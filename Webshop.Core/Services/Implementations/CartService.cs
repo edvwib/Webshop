@@ -2,24 +2,26 @@
 using Microsoft.Extensions.Configuration;
 using Webshop.Core.Models;
 using Webshop.Core.Repositories.Implementations;
+using Webshop.Core.Repositories;
 
 namespace Webshop.Core.Services.Implementations
 {
-    public class CartService
+    public class CartService : ICartService
     {
-        private readonly CartRepository _cartRepository;
-        private readonly ProductService _productService;
+        private readonly ICartRepository _cartRepository;
+        private readonly IProductService _productService;
 
-        public CartService(IConfiguration config, CartRepository cartRepository)
+        public CartService(ICartRepository cartRepository, IProductService productService)
         {
-            var connectionString = config.GetConnectionString("ConnectionString");
-
             _cartRepository = cartRepository;
-            _productService = new ProductService(new ProductsRepository(connectionString));
+            _productService = productService;
         }
 
         public List<CartModel> GetAll(string guid)
         {
+            if (string.IsNullOrWhiteSpace(guid) || guid.Length != 36)
+                return null;
+
             return _cartRepository.GetAll(guid);
         }
 

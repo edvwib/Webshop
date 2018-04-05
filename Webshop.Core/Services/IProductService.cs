@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Webshop.Core.Models;
 
-namespace Webshop.Core.Repositories
+namespace Webshop.Core.Services
 {
-    public interface IProductRepository
+    public interface IProductService
     {
         List<ProductModel> GetAll();
 
@@ -12,5 +12,6 @@ namespace Webshop.Core.Repositories
         bool Create(ProductModel product);
 
         bool Edit(ProductModel product);
+
     }
 }

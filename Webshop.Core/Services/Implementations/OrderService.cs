@@ -1,20 +1,19 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Webshop.Core.Models;
+using Webshop.Core.Repositories;
 using Webshop.Core.Repositories.Implementations;
 
 namespace Webshop.Core.Services.Implementations
 {
-    public class OrderService
+    public class OrderService : IOrderService
     {
-        private readonly OrderRepository _orderRepository;
-        private readonly CartService _cartService;
+        private readonly IOrderRepository _orderRepository;
+        private readonly ICartService _cartService;
 
-        public OrderService(IConfiguration config, OrderRepository orderRepository)
+        public OrderService(IOrderRepository orderRepository, ICartService cartService)
         {
-            var connectionString = config.GetConnectionString("ConnectionString");
-
             _orderRepository = orderRepository;
-            _cartService = new CartService(config, new CartRepository(connectionString));
+            _cartService = cartService;
 
         }
 
