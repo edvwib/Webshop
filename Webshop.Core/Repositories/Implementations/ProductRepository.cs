@@ -3,6 +3,7 @@ using System.Linq;
 using Dapper;
 using Microsoft.Data.Sqlite;
 using Webshop.Core.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Webshop.Core.Repositories.Implementations
 {

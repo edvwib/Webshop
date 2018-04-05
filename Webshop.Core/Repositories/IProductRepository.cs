@@ -12,6 +12,5 @@ namespace Webshop.Core.Repositories
         bool Create(ProductModel product);
 
         bool Edit(ProductModel product);
-
     }
 }
