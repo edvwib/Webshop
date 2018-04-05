@@ -27,11 +27,17 @@ namespace Webshop.Core.Services.Implementations
 
         public CartModel Get(string guid, int productId)
         {
+            if(productId <= 0 || guid == null || guid.Length != 36)
+                return null;
+
             return _cartRepository.Get(guid, productId);
         }
 
         public bool Add(string guid, int productId)
         {
+            if(productId <= 0 || string.IsNullOrWhiteSpace(guid) || guid.Length != 36)
+                return false;
+
             //Check if product exists in database
             if (_productService.Get(productId) == null)
                 return false;
