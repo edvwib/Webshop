@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Webshop.Core.Models;
+using Webshop.Core.Repositories;
 using Webshop.Core.Repositories.Implementations;
+using Webshop.Core.Services;
 using Webshop.Core.Services.Implementations;
 
 namespace Webshop.Api.Controllers
@@ -10,12 +12,13 @@ namespace Webshop.Api.Controllers
     [Route("api/[controller]")]
     public class CartController : Controller
     {
-        private readonly CartService _cartService;
+        private readonly ICartService _cartService;
+        private readonly ICartRepository _cartRepository;
+        private readonly IProductService _productService;
 
-        public CartController(IConfiguration config)
+        public CartController(ICartService cartService)
         {
-            var connectionString = config.GetConnectionString("ConnectionString");
-            _cartService = new CartService(config, new CartRepository(connectionString));
+            _cartService = new CartService(_cartRepository, _productService);
         }
 
         [HttpGet("{guid}")]
