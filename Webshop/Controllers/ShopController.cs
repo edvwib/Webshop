@@ -3,26 +3,29 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Webshop.Core.Models;
-using Webshop.Core.Repositories.Implementations;
+using Webshop.Core.Services;
 using Webshop.Core.Services.Implementations;
+using Webshop.Core.Repositories;
+using Webshop.Core.Repositories.Implementations;
 using Webshop.Models;
 
 namespace Webshop.Controllers
 {
     public class ShopController : Controller
     {
-        private readonly ProductService _productService;
-        private readonly CartService _cartService;
-        private readonly OrderService _orderService;
+        private readonly IProductService _productService;
+        private readonly ICartService _cartService;
+        private readonly IOrderService _orderService;
 
         private string _guid;
 
         public ShopController(IConfiguration config)
         {
-            var connectionString = config.GetConnectionString("ConnectionString");
-            _productService = new ProductService(new ProductsRepository(connectionString));
-            _cartService = new CartService(config, new CartRepository(connectionString));
-            _orderService = new OrderService(config, new OrderRepository(connectionString));
+            string connectionString = config.GetConnectionString("ConnectionString");
+
+            _productService = new ProductService(new ProductRepository(connectionString));
+            _cartService = new CartService(new CartRepository(connectionString), _productService);
+            _orderService = new OrderService(new OrderRepository(connectionString), _cartService);
         }
 
         public IActionResult Index()
