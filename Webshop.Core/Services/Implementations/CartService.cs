@@ -25,6 +25,14 @@ namespace Webshop.Core.Services.Implementations
             return _cartRepository.GetAll(guid);
         }
 
+        public decimal GetTotal(string guid)
+        {
+            if (string.IsNullOrWhiteSpace(guid) || guid.Length != 36)
+                return 0;
+
+            return _cartRepository.GetTotal(guid);
+        }
+
         public CartModel Get(string guid, int productId)
         {
             if(productId <= 0 || guid == null || guid.Length != 36)

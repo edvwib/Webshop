@@ -29,6 +29,19 @@ namespace Webshop.Core.Repositories.Implementations
             }
         }
 
+        public decimal GetTotal(string guid)
+        {
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                return connection.QuerySingleOrDefault<decimal>(
+                    "SELECT SUM(p.price*c.Count)" +
+                    "FROM carts AS c, products AS p " +
+                    "WHERE c.productId=p.Id " +
+                    "AND c.guid=@guid",
+                    new {guid});
+            }
+        }
+
         public CartModel Get(string guid, int productId)
         {
             using (var connection = new SqliteConnection(_connectionString))
@@ -57,6 +70,7 @@ namespace Webshop.Core.Repositories.Implementations
                 }
                 catch (Exception)
                 {
+
                     return false;
                 }
             }

@@ -7,6 +7,8 @@ namespace Webshop.Core.Services
     {
         List<CartModel> GetAll(string guid);
 
+        decimal GetTotal(string guid);
+
         CartModel Get(string guid, int productId);
 
         bool Add(string guid, int productId);
