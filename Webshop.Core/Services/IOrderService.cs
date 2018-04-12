@@ -5,12 +5,10 @@ namespace Webshop.Core.Services
 {
     public interface IOrderService
     {
-        OrderModel GetAddress(string guid);
+        bool AddOrder(OrderModel order);
 
-        bool AddAddress(OrderModel address);
+        bool AddOrderRow(OrderRowModel order);
 
-        OrderModel GetOrder(string guid);
-
-        bool AddOrder(string guid);
+        OrderModel Get(string guid);
     }
 }

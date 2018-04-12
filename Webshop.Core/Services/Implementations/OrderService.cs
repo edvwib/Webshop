@@ -2,6 +2,7 @@
 using Webshop.Core.Models;
 using Webshop.Core.Repositories;
 using Webshop.Core.Repositories.Implementations;
+using System.Collections.Generic;
 
 namespace Webshop.Core.Services.Implementations
 {
@@ -17,24 +18,19 @@ namespace Webshop.Core.Services.Implementations
 
         }
 
-        public OrderModel GetAddress(string guid)
+        public bool AddOrder(OrderModel order)
         {
-            return _orderRepository.GetAddress(guid);
+            return _orderRepository.AddOrder(order);
         }
 
-        public bool AddAddress(OrderModel address)
+        public bool AddOrderRow(OrderRowModel orderRow)
         {
-            return _orderRepository.AddAddress(address);
+            return _orderRepository.AddOrderRow(orderRow);
         }
 
-        public OrderModel GetOrder(string guid)
+        public OrderModel Get(string guid)
         {
-            return _orderRepository.GetOrder(guid);
-        }
-
-        public bool AddOrder(string guid)
-        {
-            return _orderRepository.AddOrder(guid);
+            return _orderRepository.Get(guid);
         }
     }
 }
