@@ -1,75 +1,46 @@
-﻿@model Webshop.Core.Models.OrderModel
+﻿@model Webshop.Core.Models.AddressModel
 
-@if (Model == null)
+@using (Html.BeginForm("ConfirmOrder", "Shop"))
 {
-    using (Html.BeginForm("Checkout", "Shop"))
-    {
-        <p class="h6 mb-4">Please enter your details below</p>
+    <p class="h6 mb-4">Please enter your details below</p>
 
-        <div class="md-form">
-            <i class="fa fa-envelope prefix"></i>
-            @Html.LabelFor(m => m.Email)
-            @Html.TextBoxFor(m => m.Email, new {@class = "form-control"})
-        </div>
+    <div class="md-form">
+        <i class="fa fa-envelope prefix"></i>
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email, new {@class = "form-control"})
+    </div>
 
-        <div class="md-form">
-            <i class="fa fa-user prefix"></i>
-            @Html.LabelFor(m => m.Name)
-            @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
-        </div>
+    <div class="md-form">
+        <i class="fa fa-user prefix"></i>
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
+    </div>
 
-        <div class="md-form">
-            <i class="fa fa-building prefix"></i>
-            @Html.LabelFor(m => m.Street)
-            @Html.TextBoxFor(m => m.Street, new {@class = "form-control"})
-        </div>
+    <div class="md-form">
+        <i class="fa fa-building prefix"></i>
+        @Html.LabelFor(m => m.Street)
+        @Html.TextBoxFor(m => m.Street, new {@class = "form-control"})
+    </div>
 
-        <div class="md-form">
-            <i class="fa fa-map prefix"></i>
-            @Html.LabelFor(m => m.Zip)
-            @Html.TextBoxFor(m => m.Zip, new {@class = "form-control"})
-        </div>
+    <div class="md-form">
+        <i class="fa fa-map prefix"></i>
+        @Html.LabelFor(m => m.Zip)
+        @Html.TextBoxFor(m => m.Zip, new {@class = "form-control"})
+    </div>
 
-        <div class="md-form">
-            <i class="fa fa-bank prefix"></i>
-            @Html.LabelFor(m => m.City)
-            @Html.TextBoxFor(m => m.City, new {@class = "form-control"})
-        </div>
+    <div class="md-form">
+        <i class="fa fa-bank prefix"></i>
+        @Html.LabelFor(m => m.City)
+        @Html.TextBoxFor(m => m.City, new {@class = "form-control"})
+    </div>
 
-        <div class="md-form">
-            <i class="fa fa-flag prefix"></i>
-            @Html.LabelFor(m => m.Country)
-            @Html.TextBoxFor(m => m.Country, new {@class = "form-control"})
-        </div>
+    <div class="md-form">
+        <i class="fa fa-flag prefix"></i>
+        @Html.LabelFor(m => m.Country)
+        @Html.TextBoxFor(m => m.Country, new {@class = "form-control"})
+    </div>
 
-        <div class="text-center mt-4">
-            <input class="btn btn-success" type="submit" value="Confirm Order"/>
-        </div>
-    }
-}
-else
-{
-    decimal totalPrice = 0;
-
-    <div class="card mb-3 pt-3 col-12 col-sm-8 col-md-5 col-lg-4 col-xl-3">
-        <div class="card-body">
-            <h4 class="card-title">Thanks for your order!</h4>
-            <p class="card-text"><b>Email:</b> @Model.Email</p>
-            <p class="card-text"><b>Shipping address:</b></p>
-            <p class="card-text">@Model.Name<br>
-                @Model.Street<br>
-                @Model.Zip @Model.City, @Model.Country</p>
-
-            <p class="card-text"><b>Order summary:</b></p>
-            @foreach (var product in Model.Cart)
-            {
-                <p class="card-text">
-                    <a href="/shop/product/@product.Id">@product.Name</a> -
-                    $@product.Price x @product.Count
-                </p>
-                totalPrice += product.Price * product.Count;
-            }
-            <p class="card-text"><b>Total:</b> $@totalPrice</p>
-        </div>
+    <div class="text-center mt-4">
+        <input class="btn btn-success" type="submit" value="Confirm Order"/>
     </div>
 }

@@ -83,32 +83,40 @@ namespace Webshop.Controllers
             return RedirectToAction("Cart");
         }
 
-        [HttpGet]
         public IActionResult Checkout()
         {
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Checkout(OrderModel address)
+        public IActionResult ConfirmOrder(AddressModel a)
         {
-            var order = new OrderModel
+            var guid = GetGuidCookie();
+
+            var address = $"{a.Name} {a.Street}, {a.Zip} {a.City} - {a.Country}";
+
+            _orderService.AddOrder(new OrderModel{
+                Guid = guid,
+                Email = a.Email,
+                Address = address,
+                Total = _cartService.GetTotal(guid),
+            });
+
+            foreach (var product in _cartService.GetAll(guid))
             {
-                Guid = GetGuidCookie(),
-                Email = address.Email,
-                Name = address.Name,
-                Street = address.Street,
-                Zip = address.Zip,
-                City = address.City,
-                Country = address.Country
-            };
+                _orderService.AddOrderRow(new OrderRowModel
+                {
+                    Guid = guid,
+                    ProductName = product.Name,
+                    ProductPrice = product.Price,
+                    ProductCount = product.Count,
+                });
+            }
 
-            _orderService.AddAddress(order);
-            _orderService.AddOrder(order.Guid);
+            Response.Cookies.Delete("guid");
+            _cartService.Empty(guid);
 
-            order.Cart = _cartService.GetAll(GetGuidCookie());
+            return View(_orderService.Get(guid));
 
-            return View(order);
         }
 
         private string GetGuidCookie()
