@@ -13,12 +13,10 @@ namespace Webshop.Api.Controllers
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
-        private readonly ICartRepository _cartRepository;
-        private readonly IProductService _productService;
 
         public CartController(ICartService cartService)
         {
-            _cartService = new CartService(_cartRepository, _productService);
+            _cartService = cartService;
         }
 
         [HttpGet("{guid}")]
@@ -48,8 +46,6 @@ namespace Webshop.Api.Controllers
         [HttpDelete("{guid}")]
         public IActionResult Delete([FromBody] string guid)
         {
-            return StatusCode(501);
-
             if (_cartService.Empty(guid))
                 return StatusCode(200);
 
