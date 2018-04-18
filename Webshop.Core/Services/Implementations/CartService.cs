@@ -31,20 +31,6 @@ namespace Webshop.Core.Services.Implementations
         }
 
         /// <summary>
-        /// Returns the total price for the products in the given cart.
-        /// If no cart exists with the given guid it returns 0.
-        /// </summary>
-        /// <param name="guid">Guid of a cart</param>
-        /// <returns>Total price</returns>
-        public decimal GetTotal(string guid)
-        {
-            if (!ValidGuid(guid))
-                return 0;
-
-            return _cartRepository.GetTotal(guid);
-        }
-
-        /// <summary>
         /// Returns a single product in the given cart.
         /// </summary>
         /// <param name="guid">Guid of a cart</param>
@@ -56,6 +42,20 @@ namespace Webshop.Core.Services.Implementations
                 return null;
 
             return _cartRepository.Get(guid, productId);
+        }
+
+        /// <summary>
+        /// Returns the total price for the products in the given cart.
+        /// If no cart exists with the given guid it returns 0.
+        /// </summary>
+        /// <param name="guid">Guid of a cart</param>
+        /// <returns>Total price</returns>
+        public decimal GetTotal(string guid)
+        {
+            if (!ValidGuid(guid))
+                return 0;
+
+            return _cartRepository.GetTotal(guid);
         }
 
         /// <summary>

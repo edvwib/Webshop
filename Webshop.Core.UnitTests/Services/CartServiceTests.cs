@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using FakeItEasy;
 using NUnit.Framework;
+using SQLitePCL;
 using Webshop.Core.Models;
 using Webshop.Core.Repositories;
 using Webshop.Core.Services;
@@ -93,6 +94,45 @@ namespace Webshop.Core.UnitTests.Services
             Assert.That(result, Is.EqualTo(expectedProduct));
         }
 
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("967d56bd-3899-")]
+        public void GetTotal_GivenInvalidGuid_ReturnsZero(string testGuid)
+        {
+            //Arrange
+            var result = _cartService.GetTotal(testGuid);
+
+            //Assert
+            Assert.That(result, Is.Zero);
+        }
+
+        [Test]
+        public void GetTotal_GivenValidGuid_ReturnsExpectedTotal()
+        {
+            //Arrange
+            const string guid = "967d56bd-3899-4097-8548-e42a6968dea0";
+            var expectedPrice = 10;
+            var testCart = new List<CartModel>
+            {
+                new CartModel
+                {
+                    Guid = guid,
+                    Id = 1,
+                    Count = 1,
+                    //Price = expectedPrice,
+                }
+            };
+
+            A.CallTo(() => _cartRepository.GetTotal(guid)).Returns(expectedPrice);
+
+            //Act
+            var result = _cartService.GetTotal(guid);
+
+            //Assert
+            Assert.That(result, Is.EqualTo(expectedPrice));
+        }
+
         [TestCase(0, "")]
         [TestCase(0, " ")]
         [TestCase(0, null)]
@@ -118,6 +158,8 @@ namespace Webshop.Core.UnitTests.Services
             const string guid = "967d56bd-3899-4097-8548-e42a6968dea0";
             const int productId = 1;
 
+            A.CallTo(() => _productsRepository.Get(productId)).Returns(new ProductModel());
+            A.CallTo(() => _cartRepository.Get(guid, productId)).Returns(null);
             A.CallTo(() => _cartRepository.Add(guid, productId)).Returns(true);
 
             //Act
@@ -125,6 +167,18 @@ namespace Webshop.Core.UnitTests.Services
 
             //Assert
             Assert.That(result, Is.True);
+        }
+
+        [TestCase(0, 10, "967d56bd-3899-4097-8548-e42a6968dea0")]
+        [TestCase(1, -10, "967d56bd-3899-4097-8548-e42a6968dea0")]
+        [TestCase(1, 10, "967d56bd-3899")]
+        public void UpdateCount_GivenInvalidData_ReturnsFalse(int productId, int count, string guid)
+        {
+            //Act
+            var result = _cartService.UpdateCount(guid, productId, count);
+
+            //Assert
+            Assert.That(result, Is.False);
         }
     }
 }
