@@ -47,7 +47,7 @@
             <td></td>
             <td><b>Total:</b> $@totalPrice</td>
             <td>
-                @if (Model != null)
+                @if (Model.Any())
                 {
                     <a href="/shop/checkout/" class="btn btn-primary">Checkout</a>
                 }
@@ -57,7 +57,7 @@
     </table>
 </div>
 
-@if (Model != null)
+@if (Model.Any())
 {
     using (Html.BeginForm("EmptyCart", "Shop"))
     {

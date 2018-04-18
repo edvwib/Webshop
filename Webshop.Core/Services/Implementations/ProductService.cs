@@ -17,7 +17,6 @@ namespace Webshop.Core.Services.Implementations
 
         public List<ProductModel> GetAll()
         {
-            
             return _productsRepository.GetAll();
         }
 
