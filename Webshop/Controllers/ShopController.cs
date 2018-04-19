@@ -85,23 +85,28 @@ namespace Webshop.Controllers
 
         public IActionResult Checkout()
         {
-            return View();
+            var cart = _cartService.GetAll(GetGuidCookie());
+
+            return View(new CheckoutModel{Cart = cart});
         }
 
-        public IActionResult ConfirmOrder(AddressModel a)
+        [HttpPost]
+        public IActionResult ConfirmOrder(CheckoutModel c)
         {
             var guid = GetGuidCookie();
+            var cart = _cartService.GetAll(guid);
+            var total = _cartService.GetTotal(guid);
 
-            var address = $"{a.Name} {a.Street}, {a.Zip} {a.City} - {a.Country}";
+            var address = $"{c.Address.Name} {c.Address.Street}, {c.Address.Zip} {c.Address.City} - {c.Address.Country}";
 
             _orderService.AddOrder(new OrderModel{
                 Guid = guid,
-                Email = a.Email,
+                Email = c.Address.Email,
                 Address = address,
-                Total = _cartService.GetTotal(guid),
+                Total = total,
             });
 
-            foreach (var product in _cartService.GetAll(guid))
+            foreach (var product in cart)
             {
                 _orderService.AddOrderRow(new OrderRowModel
                 {
@@ -112,11 +117,18 @@ namespace Webshop.Controllers
                 });
             }
 
+            var checkout = new CheckoutModel{
+                Order = new OrderModel{
+                    Address = address,
+                    Total = total,
+                },
+                Cart = cart,
+            };
+
             Response.Cookies.Delete("guid");
             _cartService.Empty(guid);
 
-            return View(_orderService.Get(guid));
-
+            return View(checkout);
         }
 
         private string GetGuidCookie()

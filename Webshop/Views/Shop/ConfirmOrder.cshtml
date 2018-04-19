@@ -1,4 +1,4 @@
-@model Webshop.Core.Models.OrderModel
+@model Webshop.Core.Models.CheckoutModel
 
 @{
     decimal totalPrice = 0;
@@ -7,9 +7,15 @@
 <div class="card mb-3 pt-3 col-12 col-sm-8 col-md-5 col-lg-4 col-xl-3">
     <div class="card-body">
         <h4 class="card-title">Thanks for your order!</h4>
-        <p class="card-text"><b>Email:</b> @Model.Email</p>
-        <p class="card-text"><b>Shipping address:</b></p>
-        <p class="card-text">@Model.Address</p>
-        <p class="card-text"><b>Total:</b> $@Model.Total</p>
+        <p class="card-text">Address: @Model.Order.Address</p>
+        <p class="card-text"><b>Total:</b> $@Model.Order.Total</p>
     </div>
+
+    @foreach (var product in Model.Cart)
+    {
+        <div class="card col-12 my-2">
+            <a class="card-title" href="/Shop/Product/@product.Id">@product.Name x @product.Count</a>
+            <p class="card-text">$@product.Price</p>
+        </div>
+    }
 </div>

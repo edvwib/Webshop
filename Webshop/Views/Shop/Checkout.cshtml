@@ -1,4 +1,12 @@
-﻿@model Webshop.Core.Models.AddressModel
+﻿@model Webshop.Core.Models.CheckoutModel
+
+@foreach (var product in Model.Cart)
+{
+    <div class="card col-12 my-2">
+        <a class="card-title" href="/Shop/Product/@product.Id">@product.Name x @product.Count</a>
+        <p class="card-text">$@product.Price</p>
+    </div>
+}
 
 @using (Html.BeginForm("ConfirmOrder", "Shop"))
 {
@@ -6,38 +14,38 @@
 
     <div class="md-form">
         <i class="fa fa-envelope prefix"></i>
-        @Html.LabelFor(m => m.Email)
-        @Html.TextBoxFor(m => m.Email, new {@class = "form-control"})
+        @Html.LabelFor(m => m.Address.Email)
+        @Html.TextBoxFor(m => m.Address.Email, new {@class = "form-control"})
     </div>
 
     <div class="md-form">
         <i class="fa fa-user prefix"></i>
-        @Html.LabelFor(m => m.Name)
-        @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
+        @Html.LabelFor(m => m.Address.Name)
+        @Html.TextBoxFor(m => m.Address.Name, new {@class = "form-control"})
     </div>
 
     <div class="md-form">
         <i class="fa fa-building prefix"></i>
-        @Html.LabelFor(m => m.Street)
-        @Html.TextBoxFor(m => m.Street, new {@class = "form-control"})
+        @Html.LabelFor(m => m.Address.Street)
+        @Html.TextBoxFor(m => m.Address.Street, new {@class = "form-control"})
     </div>
 
     <div class="md-form">
         <i class="fa fa-map prefix"></i>
-        @Html.LabelFor(m => m.Zip)
-        @Html.TextBoxFor(m => m.Zip, new {@class = "form-control"})
+        @Html.LabelFor(m => m.Address.Zip)
+        @Html.TextBoxFor(m => m.Address.Zip, new {@class = "form-control"})
     </div>
 
     <div class="md-form">
         <i class="fa fa-bank prefix"></i>
-        @Html.LabelFor(m => m.City)
-        @Html.TextBoxFor(m => m.City, new {@class = "form-control"})
+        @Html.LabelFor(m => m.Address.City)
+        @Html.TextBoxFor(m => m.Address.City, new {@class = "form-control"})
     </div>
 
     <div class="md-form">
         <i class="fa fa-flag prefix"></i>
-        @Html.LabelFor(m => m.Country)
-        @Html.TextBoxFor(m => m.Country, new {@class = "form-control"})
+        @Html.LabelFor(m => m.Address.Country)
+        @Html.TextBoxFor(m => m.Address.Country, new {@class = "form-control"})
     </div>
 
     <div class="text-center mt-4">
